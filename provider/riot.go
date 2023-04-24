@@ -5,6 +5,7 @@ import (
 	"os"
 	"encoding/json"
 	"errors"
+	"net/http"
 
 	. "gaming-service/model"
 
@@ -26,20 +27,20 @@ func riotRequest[T any](method string, local string, route string) (T, int, erro
 	err = json.Unmarshal(res.Response, &response)
 	if err != nil {
 		err := errors.New("反序列化失敗")
-		return response, 500, err
+		return response, http.StatusInternalServerError, err
 	}
 
-	return response, 200, nil
+	return response, http.StatusOK, nil
 }
 
 func GetUserByName(c *gin.Context, local string, name string) (RiotUser, int, ErrorResponse) {
 	url := fmt.Sprintf("/summoner/v4/summoners/by-name/%v", name)
 	errObj := ErrorResponse {}
 	res, statusCode, err := riotRequest[RiotUser]("GET", local, url)
-	if statusCode == 404 {
+	if statusCode == http.StatusNotFound {
 		err = errors.New("查無該用戶")
 	}
-	if statusCode != 200 {
+	if statusCode != http.StatusOK {
 		errObj = ErrorResponse {
 			Code: statusCode, 
 			Message: err.Error(),

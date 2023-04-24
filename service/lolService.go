@@ -1,6 +1,8 @@
 package service
 
 import (
+	"net/http"
+
 	. "gaming-service/model"
 	. "gaming-service/config"
 	provider "gaming-service/provider"
@@ -14,10 +16,10 @@ func GetUserByName(c *gin.Context) {
 
 	if !isCorrectCountry(local) {
 		errObj := ErrorResponse {
-			Code: 404, 
+			Code: http.StatusNotFound, 
 			Message: "查無該國家",
 		}
-		c.JSON(404, errObj)
+		c.JSON(http.StatusNotFound, errObj)
 		return
 	}
 	

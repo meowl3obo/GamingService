@@ -14,7 +14,7 @@ func Request(method string, url string, body io.Reader, headers map[string]strin
 	response := HttpResponse{}
 	request, err := http.NewRequest(method, url, body)
 	if err != nil {
-		response.StatusCode = 500
+		response.StatusCode = http.StatusInternalServerError
 		return response, err
 	}
 	if headers != nil {
@@ -23,7 +23,7 @@ func Request(method string, url string, body io.Reader, headers map[string]strin
 		}
 	}
 	res, err := client.Do(request)
-	if err != nil || res.StatusCode != 200 {
+	if err != nil || res.StatusCode != http.StatusOK {
 		response.StatusCode = res.StatusCode
 		if err == nil {
 			err = errors.New("API 請求失敗")
@@ -33,10 +33,10 @@ func Request(method string, url string, body io.Reader, headers map[string]strin
 	defer res.Body.Close()
 	resBody, err := ioutil.ReadAll(res.Body)
 	if err != nil {
-		response.StatusCode = 500
+		response.StatusCode = http.StatusInternalServerError
 		return response, err
 	}
-	response.StatusCode = 200
+	response.StatusCode = http.StatusOK
 	response.Response = resBody
 	return response, nil
 }
