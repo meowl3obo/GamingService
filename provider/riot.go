@@ -33,7 +33,7 @@ func riotRequest[T any](method string, local string, route string) (T, int, erro
 }
 
 func GetUserByName(c *gin.Context, local string, name string) (RiotUser, int, ErrorResponse) {
-	url := fmt.Sprintf("/summoner/v4/summoners/by-name/%v", name)
+	url := fmt.Sprintf("/lol/summoner/v4/summoners/by-name/%v", name)
 	errObj := ErrorResponse {}
 	res, statusCode, err := riotRequest[RiotUser]("GET", local, url)
 	if statusCode == http.StatusNotFound {
