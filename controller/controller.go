@@ -17,13 +17,15 @@ func NewController(e *gin.Engine) *Controller {
 }
 
 func (r *Controller) Router() {
-	r.Use(middleware.CorsMiddleware())
-	r.Use(cors.Default())
+	r.Use(
+		middleware.CorsMiddleware(),
+		cors.Default(),
+	)
 	api := r.Group("/api")
 	{
 		api.GET("/version", service.Version)
 
-		lol := api.Group("/lol") 
+		lol := api.Group("/lol", middleware.CountryHandler()) 
 		{
 			lol.GET("/:local/user/byname", service.GetUserByName)
 		}
