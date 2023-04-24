@@ -26,7 +26,6 @@ func riotRequest[T any](method string, local string, route string) (T, int, erro
 
 	err = json.Unmarshal(res.Response, &response)
 	if err != nil {
-		err := errors.New("反序列化失敗")
 		return response, http.StatusInternalServerError, err
 	}
 
