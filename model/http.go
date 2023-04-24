@@ -6,3 +6,8 @@ type Response[T any] struct {
 }
 
 type HttpResponse = Response[[]byte]
+
+type ErrorResponse struct {
+	Code int
+	Message string
+}
