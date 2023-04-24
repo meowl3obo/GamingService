@@ -14,9 +14,9 @@ import (
 func riotRequest[T any](method string, local string, route string) (T, int, error) {
 	var response T
 	header := map[string]string {
-		"X-Riot-Token": os.Getenv("RIOTTOKEN"),
+		"X-Riot-Token": os.Getenv("RIOT_TOKEN"),
 	}
-	baseUrl := fmt.Sprintf(os.Getenv("RIOTAPI"), local)
+	baseUrl := fmt.Sprintf(os.Getenv("RIOT_API"), local)
 	url := fmt.Sprintf("%v%v", baseUrl, route)
 	res, err := Request("GET", url, nil, header)
 	if err != nil {
