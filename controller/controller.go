@@ -22,5 +22,10 @@ func (r *Controller) Router() {
 	api := r.Group("/api")
 	{
 		api.GET("/version", service.Version)
+
+		lol := api.Group("/lol") 
+		{
+			lol.GET("/:local/user/byname", service.GetUserByName)
+		}
 	}
 }
