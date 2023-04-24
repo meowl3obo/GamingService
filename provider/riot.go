@@ -34,5 +34,9 @@ func riotRequest[T any](method string, local string, route string) (T, int, erro
 
 func GetUserByName(c *gin.Context, local string, name string) (RiotUser, int, error) {
 	url := fmt.Sprintf("/summoner/v4/summoners/by-name/%v", name)
-	return riotRequest[RiotUser]("GET", local, url)
+	res, statusCode, err := riotRequest[RiotUser]("GET", local, url)
+	if statusCode == 404 {
+		err = errors.New("查無該用戶")
+	}
+	return res, statusCode, err
 }

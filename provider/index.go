@@ -28,9 +28,6 @@ func Request(method string, url string, body io.Reader, headers map[string]strin
 		if err == nil {
 			err = errors.New("API 請求失敗")
 		}
-		if res.StatusCode == 404 {
-			err = errors.New("查無該用戶")
-		}
 		return response, err
 	}
 	defer res.Body.Close()
