@@ -1,25 +1,23 @@
 package provider
 
 import (
-	"fmt"
-	"os"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"net/http"
+	"os"
 
 	. "gaming-service/model"
-
-	"github.com/gin-gonic/gin"
 )
 
 func riotRequest[T any](method string, local string, route string) (T, int, error) {
 	var response T
-	header := map[string]string {
+	header := map[string]string{
 		"X-Riot-Token": os.Getenv("RIOT_TOKEN"),
 	}
 	baseUrl := fmt.Sprintf(os.Getenv("RIOT_API"), local)
 	url := fmt.Sprintf("%v%v", baseUrl, route)
-	res, err := Request("GET", url, nil, header)
+	res, err := Request(method, url, nil, header)
 	if err != nil {
 		return response, res.StatusCode, err
 	}
@@ -32,16 +30,16 @@ func riotRequest[T any](method string, local string, route string) (T, int, erro
 	return response, http.StatusOK, nil
 }
 
-func GetUserByName(c *gin.Context, local string, name string) (RiotUser, int, ErrorResponse) {
+func GetUserByName(local string, name string) (RiotUser, int, ErrorResponse) {
 	url := fmt.Sprintf("/lol/summoner/v4/summoners/by-name/%v", name)
-	errObj := ErrorResponse {}
+	errObj := ErrorResponse{}
 	res, statusCode, err := riotRequest[RiotUser]("GET", local, url)
 	if statusCode == http.StatusNotFound {
 		err = errors.New("查無該用戶")
 	}
 	if statusCode != http.StatusOK {
-		errObj = ErrorResponse {
-			Code: statusCode, 
+		errObj = ErrorResponse{
+			Code:    statusCode,
 			Message: err.Error(),
 		}
 	}

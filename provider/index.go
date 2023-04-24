@@ -1,10 +1,11 @@
 package provider
 
 import (
+	"errors"
+	"fmt"
 	"io"
 	"io/ioutil"
 	"net/http"
-	"errors"
 
 	. "gaming-service/model"
 )
@@ -23,6 +24,7 @@ func Request(method string, url string, body io.Reader, headers map[string]strin
 		}
 	}
 	res, err := client.Do(request)
+	fmt.Println(request)
 	if err != nil || res.StatusCode != http.StatusOK {
 		response.StatusCode = res.StatusCode
 		if err == nil {

@@ -9,8 +9,8 @@ import (
 func GetUserByName(c *gin.Context) {
 	local := c.Param("local")
 	name := c.Query("name")
-	
-	userData, statusCode, errObj := provider.GetUserByName(c, local, name)
+
+	userData, statusCode, errObj := provider.GetUserByName(local, name)
 
 	if statusCode != 200 {
 		c.JSON(statusCode, errObj)
