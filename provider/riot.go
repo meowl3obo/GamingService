@@ -82,7 +82,6 @@ func GetGameParticipants(region string, matchID string) (MatchParticipants, int,
 
 func GetGameTimeline(region string, matchID string) (MatchTimeline, int, ErrorResponse) {
 	url := fmt.Sprintf("/lol/match/v5/matches/%v/timeline", matchID)
-	fmt.Println(url)
 	errObj := ErrorResponse{}
 	res, statusCode, err := riotRequest[MatchTimeline]("GET", region, url)
 	if statusCode == http.StatusNotFound {
