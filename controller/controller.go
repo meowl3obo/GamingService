@@ -28,6 +28,7 @@ func (r *Controller) Router() {
 		lol := api.Group("/lol", middleware.CountryHandler()) 
 		{
 			lol.GET("/:local/user/byname", service.GetUserByName)
+			lol.GET("/:local/:puuid/games", middleware.RegionHandler(), service.GetGamesByPuuid)
 		}
 	}
 }

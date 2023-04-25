@@ -26,7 +26,6 @@ func main() {
 }
 
 func loadEnv() {
-	fmt.Println(ENV)
 	envPath := ".env"
 
 	if ENV != "" {
@@ -45,6 +44,6 @@ func loadEnv() {
 	err := godotenv.Load(envPath)
 
 	if err != nil {
-		fmt.Println(err)
+		fmt.Println("env load fail: ", err)
 	}
 }

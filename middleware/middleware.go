@@ -2,7 +2,6 @@ package middleware
 
 import (
 	"net/http"
-	"fmt"
 
 	. "gaming-service/model"
 	. "gaming-service/config"
@@ -31,7 +30,6 @@ func CorsMiddleware() gin.HandlerFunc {
 func CountryHandler() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		local := c.Param("local")
-		fmt.Println(local)
 		if !isCorrectCountry(local) {
 			errObj := ErrorResponse {
 				Code: http.StatusNotFound, 
@@ -39,7 +37,23 @@ func CountryHandler() gin.HandlerFunc {
 			}
 			c.JSON(http.StatusNotFound, errObj)
 			c.AbortWithStatus(http.StatusNotFound)
-			fmt.Println("err")
+			return
+		}
+		c.Next()
+	}
+}
+
+func RegionHandler() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		local := c.Param("local")
+		region := CountryMap[local]
+		if region == "" {
+			errObj := ErrorResponse {
+				Code: http.StatusNotFound, 
+				Message: "查無該國家",
+			}
+			c.JSON(http.StatusNotFound, errObj)
+			c.AbortWithStatus(http.StatusNotFound)
 			return
 		}
 		c.Next()

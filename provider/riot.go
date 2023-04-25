@@ -21,7 +21,6 @@ func riotRequest[T any](method string, local string, route string) (T, int, erro
 	if err != nil {
 		return response, res.StatusCode, err
 	}
-
 	err = json.Unmarshal(res.Response, &response)
 	if err != nil {
 		return response, http.StatusInternalServerError, err
@@ -45,4 +44,39 @@ func GetUserByName(local string, name string) (RiotUser, int, ErrorResponse) {
 	}
 
 	return res, statusCode, errObj
+}
+
+func GetGamesID(region string, puuid string, count string) ([]string, int, ErrorResponse) {
+	url := fmt.Sprintf("/lol/match/v5/matches/by-puuid/%v/ids?start=0&count=%v", puuid, count)
+	errObj := ErrorResponse{}
+	res, statusCode, err := riotRequest[[]string]("GET", region, url)
+	if statusCode == http.StatusNotFound {
+		err = errors.New("查無該用戶")
+	}
+	if statusCode != http.StatusOK {
+		errObj = ErrorResponse{
+			Code:    statusCode,
+			Message: err.Error(),
+		}
+	}
+
+	return res, statusCode, errObj
+}
+
+func GetGameInfo(region string, gameID string) (MatchInfo, int, ErrorResponse) {
+	url := fmt.Sprintf("/lol/match/v5/matches/%v", gameID)
+	errObj := ErrorResponse{}
+	res, statusCode, err := riotRequest[MatchInfo]("GET", region, url)
+	if statusCode == http.StatusNotFound {
+		err = errors.New("查無該賽事")
+	}
+	if statusCode != http.StatusOK {
+		errObj = ErrorResponse{
+			Code:    statusCode,
+			Message: err.Error(),
+		}
+	}
+
+	return res, statusCode, errObj
+
 }
