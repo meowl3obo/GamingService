@@ -27,7 +27,7 @@ func GetGamesByPuuid(c *gin.Context) {
 	count := c.Query("count")
 	region := CountryMap[local]
 
-	response := []MatchInfo {}
+	response := []MatchParticipants {}
 
 	gameIDs, statusCode, errObj := provider.GetGamesID(region, puuid, count)
 
@@ -36,9 +36,9 @@ func GetGamesByPuuid(c *gin.Context) {
 	}
 
 	for _, gameID := range gameIDs {
-		gameInfo, statusCode, _ := provider.GetGameInfo(region, gameID)
+		gameParticipants, statusCode, _ := provider.GetGameParticipants(region, gameID)
 		if statusCode == 200 {
-			response = append(response, gameInfo)
+			response = append(response, gameParticipants)
 		}
 	}
 	c.JSON(200, response)
