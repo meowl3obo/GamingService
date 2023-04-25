@@ -63,8 +63,8 @@ func GetGamesID(region string, puuid string, count string) ([]string, int, Error
 	return res, statusCode, errObj
 }
 
-func GetGameParticipants(region string, gameID string) (MatchParticipants, int, ErrorResponse) {
-	url := fmt.Sprintf("/lol/match/v5/matches/%v", gameID)
+func GetGameParticipants(region string, matchID string) (MatchParticipants, int, ErrorResponse) {
+	url := fmt.Sprintf("/lol/match/v5/matches/%v", matchID)
 	errObj := ErrorResponse{}
 	res, statusCode, err := riotRequest[MatchParticipants]("GET", region, url)
 	if statusCode == http.StatusNotFound {
@@ -78,5 +78,23 @@ func GetGameParticipants(region string, gameID string) (MatchParticipants, int, 
 	}
 
 	return res, statusCode, errObj
-
 }
+
+func GetGameTimeline(region string, matchID string) (MatchTimeline, int, ErrorResponse) {
+	url := fmt.Sprintf("/lol/match/v5/matches/%v/timeline", matchID)
+	fmt.Println(url)
+	errObj := ErrorResponse{}
+	res, statusCode, err := riotRequest[MatchTimeline]("GET", region, url)
+	if statusCode == http.StatusNotFound {
+		err = errors.New("查無該賽事")
+	}
+	if statusCode != http.StatusOK {
+		errObj = ErrorResponse{
+			Code:    statusCode,
+			Message: err.Error(),
+		}
+	}
+
+	return res, statusCode, errObj
+}
+
