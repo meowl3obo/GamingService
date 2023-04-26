@@ -14,11 +14,11 @@ import (
 )
 
 var (
-	matchDetails chan GamreInfo
+	matchDetails chan GameInfo
 )
 
 func init() {
-	matchDetails = make(chan GamreInfo)
+	matchDetails = make(chan GameInfo)
 }
 
 func GetUserByName(c *gin.Context) {
@@ -77,7 +77,7 @@ func GetGameInfo(c *gin.Context) {
 	if statusCode != 200 {
 		c.JSON(statusCode, errObj)
 	} else {
-		c.JSON(statusCode, gameInfo)
+		c.JSON(statusCode, transfer.ToMatchDetails(gameInfo))
 	}
 }
 
@@ -96,7 +96,7 @@ func GetGameTimeLine(c *gin.Context) {
 }
 
 func getGameInfo(region string, matchID string) {
-	response := GamreInfo{}
+	response := GameInfo{}
 	gameInfo, statusCode, err := provider.GetGameInfo(region, matchID)
 	if statusCode == 200 {
 		response = gameInfo
