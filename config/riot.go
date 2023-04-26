@@ -20,4 +20,14 @@ var (
 		"LA1":  "AMERICAS",
 		"LA2":  "AMERICAS",
 	}
+	LangList    = []string{}
+	VersionList = []string{}
 )
+
+func SetLangList(langList []string) {
+	LangList = langList
+}
+
+func SetVersionList(versionList []string) {
+	VersionList = versionList
+}

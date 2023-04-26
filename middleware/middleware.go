@@ -87,10 +87,62 @@ func CountHandler() gin.HandlerFunc {
 	}
 }
 
+func LangHandler() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		lang := c.Query("lang")
+		if lang != "" && !isCorrectLang(lang) {
+			errObj := ErrorResponse{
+				Code:    http.StatusNotFound,
+				Message: "查無該語系資料",
+			}
+			c.JSON(http.StatusNotFound, errObj)
+			c.AbortWithStatus(http.StatusNotFound)
+			return
+		}
+		c.Next()
+	}
+}
+
+func VersionHandler() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		version := c.Query("version")
+		if version != "" && !isCorrectVersion(version) {
+			errObj := ErrorResponse{
+				Code:    http.StatusNotFound,
+				Message: "查無該版本資料",
+			}
+			c.JSON(http.StatusNotFound, errObj)
+			c.AbortWithStatus(http.StatusNotFound)
+			return
+		}
+		c.Next()
+	}
+}
+
 func isCorrectCountry(local string) bool {
 	isCorrect := false
 	for _, country := range CountryList {
 		if local == country {
+			isCorrect = true
+		}
+	}
+	return isCorrect
+}
+
+func isCorrectVersion(version string) bool {
+	isCorrect := false
+	for _, correctVersion := range VersionList {
+		if version == correctVersion {
+			isCorrect = true
+		}
+	}
+	return isCorrect
+}
+
+func isCorrectLang(lang string) bool {
+	isCorrect := false
+	for _, correctLang := range LangList {
+		if lang == correctLang {
 			isCorrect = true
 		}
 	}

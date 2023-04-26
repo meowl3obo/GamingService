@@ -25,12 +25,19 @@ func (r *Controller) Router() {
 	{
 		api.GET("/version", service.Version)
 
-		lol := api.Group("/lol", middleware.CountryHandler())
+		lol := api.Group("/lol")
 		{
-			lol.GET("/:local/user/byname", service.GetUserByName)
-			lol.GET("/:local/:puuid/games", middleware.RegionHandler(), middleware.CountHandler(), service.GetGamesByPuuid)
-			lol.GET("/:local/game/:matchID", middleware.RegionHandler(), service.GetGameInfo)
-			lol.GET("/:local/game/:matchID/timeline", middleware.RegionHandler(), service.GetGameTimeLine)
+			localLol := lol.Group("/:local", middleware.CountryHandler())
+			{
+				localLol.GET("/user/byname", service.GetUserByName)
+				localLol.GET("/:puuid/games", middleware.RegionHandler(), middleware.CountHandler(), service.GetGamesByPuuid)
+				localLol.GET("/game/:matchID", middleware.RegionHandler(), service.GetGameInfo)
+				localLol.GET("/game/:matchID/timeline", middleware.RegionHandler(), service.GetGameTimeLine)
+			}
+			assetsLol := lol.Group("/assets", middleware.LangHandler(), middleware.VersionHandler())
+			{
+				assetsLol.GET("/roles", service.GetRoles)
+			}
 		}
 	}
 }

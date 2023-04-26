@@ -5,7 +5,9 @@ import (
 	"os"
 	"path/filepath"
 
+	config "gaming-service/config"
 	"gaming-service/controller"
+	"gaming-service/provider"
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
@@ -15,6 +17,11 @@ var ENV string
 
 func init() {
 	loadEnv()
+	lolVersions := provider.GetVersions()
+	supportLang := provider.GetLang()
+	os.Setenv("LOL_VERSION", lolVersions[0])
+	config.SetLangList(supportLang)
+	config.SetVersionList(lolVersions)
 }
 
 func main() {
