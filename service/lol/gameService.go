@@ -4,7 +4,7 @@ import (
 	"fmt"
 	. "gaming-service/config"
 	. "gaming-service/model"
-	provider "gaming-service/provider"
+	provider "gaming-service/provider/lol"
 	transfer "gaming-service/transfer"
 	"net/http"
 	"sort"

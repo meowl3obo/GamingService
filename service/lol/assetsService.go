@@ -1,7 +1,7 @@
 package lolService
 
 import (
-	provider "gaming-service/provider"
+	provider "gaming-service/provider/lol"
 	"os"
 
 	"github.com/gin-gonic/gin"
