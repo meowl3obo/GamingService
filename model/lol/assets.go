@@ -2,7 +2,6 @@ package lolModel
 
 type RolesDetails struct {
 	Type    string                 `json:"type"`
-	Format  string                 `json:"format"`
 	Version string                 `json:"version"`
 	Data    map[string]RoleDetails `json:"data"`
 }
@@ -51,5 +50,45 @@ type RoleDetails struct {
 		Attackdamageperlevel float64 `json:"attackdamageperlevel"`
 		Attackspeedperlevel  float64 `json:"attackspeedperlevel"`
 		Attackspeed          float64 `json:"attackspeed"`
+	} `json:"stats"`
+}
+
+type ItemsDetails struct {
+	Type    string                 `json:"type"`
+	Version string                 `json:"version"`
+	Data    map[string]ItemDetails `json:"data"`
+}
+
+type ItemDetails struct {
+	Name        string   `json:"name"`
+	Description string   `json:"description"`
+	Colloq      string   `json:"colloq"`
+	Plaintext   string   `json:"plaintext"`
+	Into        []string `json:"into"`
+	From        []string `json:"from"`
+	Image       struct {
+		Full   string `json:"full"`
+		Sprite string `json:"sprite"`
+		Group  string `json:"group"`
+		X      int    `json:"x"`
+		Y      int    `json:"y"`
+		W      int    `json:"w"`
+		H      int    `json:"h"`
+	} `json:"image"`
+	Gold struct {
+		Base        int  `json:"base"`
+		Purchasable bool `json:"purchasable"`
+		Total       int  `json:"total"`
+		Sell        int  `json:"sell"`
+	} `json:"gold"`
+	Tags []string `json:"tags"`
+	Maps struct {
+		Num11 bool `json:"11"`
+		Num12 bool `json:"12"`
+		Num21 bool `json:"21"`
+		Num22 bool `json:"22"`
+	} `json:"maps"`
+	Stats struct {
+		FlatMovementSpeedMod int `json:"FlatMovementSpeedMod"`
 	} `json:"stats"`
 }

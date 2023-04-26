@@ -34,3 +34,19 @@ type RoleStatus struct {
 	Attackspeedperlevel  float64 //成長攻速
 	Attackspeed          float64 //攻速
 }
+
+type ItemResponse struct {
+	Name        string
+	Description string
+	Into        []string
+	From        []string
+	Image       string
+	Gold        ItemGold
+	Tags        []string
+}
+
+type ItemGold struct {
+	Base  int
+	Total int
+	Sell  int
+}

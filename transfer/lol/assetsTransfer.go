@@ -48,3 +48,27 @@ func ToRoleMap(source RolesDetails) map[string]RoleResponse {
 
 	return response
 }
+
+func ToItemMap(source ItemsDetails) map[string]ItemResponse {
+	response := map[string]ItemResponse{}
+
+	for key, itemDetails := range source.Data {
+		itemData := ItemResponse{
+			Name:        itemDetails.Name,
+			Description: itemDetails.Description,
+			Into:        itemDetails.Into,
+			From:        itemDetails.From,
+			Image:       fmt.Sprintf("%v/%v", itemDetails.Image.Group, itemDetails.Image.Full),
+			Tags:        itemDetails.Tags,
+		}
+		itemGold := ItemGold{
+			Base:  itemDetails.Gold.Base,
+			Total: itemDetails.Gold.Total,
+			Sell:  itemDetails.Gold.Sell,
+		}
+		itemData.Gold = itemGold
+		response[key] = itemData
+	}
+
+	return response
+}

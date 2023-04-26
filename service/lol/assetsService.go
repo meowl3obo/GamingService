@@ -27,3 +27,22 @@ func GetRoles(c *gin.Context) {
 		c.JSON(statusCode, transfer.ToRoleMap(rolesDetails))
 	}
 }
+
+func GetItems(c *gin.Context) {
+	version := c.Query("version")
+	lang := c.Query("lang")
+	if version == "" {
+		version = os.Getenv("LOL_VERSION")
+	}
+	if lang == "" {
+		lang = "en_US"
+	}
+
+	items, statusCode, errObj := provider.GetItems(version, lang)
+
+	if statusCode != 200 {
+		c.JSON(statusCode, errObj)
+	} else {
+		c.JSON(statusCode, transfer.ToItemMap(items))
+	}
+}

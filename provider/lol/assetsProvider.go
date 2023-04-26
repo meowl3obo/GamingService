@@ -41,3 +41,17 @@ func GetRolesDetails(version string, lang string) (RolesDetails, int, ErrorRespo
 	}
 	return rolesDetails, statusCode, errObj
 }
+
+func GetItems(version string, lang string) (ItemsDetails, int, ErrorResponse) {
+	route := fmt.Sprintf("/cdn/%v/data/%v/item.json", version, lang)
+	rolesDetails, statusCode, err := riot.LolRequest[ItemsDetails]("GET", route)
+	errObj := ErrorResponse{}
+	if err != nil {
+		errObj = ErrorResponse{
+			Code:    statusCode,
+			Message: err.Error(),
+		}
+	}
+	return rolesDetails, statusCode, errObj
+
+}

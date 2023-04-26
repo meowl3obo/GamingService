@@ -42,6 +42,7 @@ func (r *Controller) Router() {
 			assetsLol := lol.Group("/assets", middleware.LangHandler(), middleware.VersionHandler())
 			{
 				assetsLol.GET("/roles", lolService.GetRoles)
+				assetsLol.GET("/items", lolService.GetItems)
 			}
 		}
 	}
