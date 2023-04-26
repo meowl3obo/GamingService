@@ -26,6 +26,7 @@ func ToMatchOverviewResponse(source MatchParticipants) MatchOverviewResponse {
 			Kills:   sourceParticipant.Kills,
 			Deaths:  sourceParticipant.Deaths,
 			Assists: sourceParticipant.Assists,
+			Role:    sourceParticipant.ChampionName,
 		}
 		participans = append(participans, participan)
 	}

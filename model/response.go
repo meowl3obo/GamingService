@@ -24,6 +24,7 @@ type ParticipantOverview struct {
 	Kills   int // 擊殺
 	Deaths  int // 死亡
 	Assists int // 助攻
+	Role    string
 }
 
 type ParticipantDetails struct {
@@ -33,4 +34,5 @@ type ParticipantDetails struct {
 	Kills   int // 擊殺
 	Deaths  int // 死亡
 	Assists int // 助攻
+	Role    string
 }
