@@ -19,6 +19,9 @@ func riotRequest[T any](method string, local string, route string) (T, int, erro
 	url := fmt.Sprintf("%v%v", baseUrl, route)
 	res, err := Request(method, url, nil, header)
 	if err != nil {
+		if res.StatusCode == 429 {
+			err = errors.New("以達到請求上限，請稍後再嘗試")
+		}
 		return response, res.StatusCode, err
 	}
 	err = json.Unmarshal(res.Response, &response)
