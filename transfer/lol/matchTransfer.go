@@ -1,8 +1,9 @@
 package lolTransfer
 
 import (
-	. "gaming-service/model/lol"
 	"strconv"
+
+	. "gaming-service/model/lol"
 )
 
 func ToMatchOverview(source MatchInfo) MatchOverviewResponse {

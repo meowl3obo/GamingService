@@ -2,13 +2,14 @@ package lolService
 
 import (
 	"fmt"
+	"net/http"
+	"sort"
+	"time"
+
 	. "gaming-service/config"
 	. "gaming-service/model/lol"
 	provider "gaming-service/provider/lol"
 	transfer "gaming-service/transfer/lol"
-	"net/http"
-	"sort"
-	"time"
 
 	"github.com/gin-gonic/gin"
 )
