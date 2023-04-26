@@ -18,9 +18,9 @@ var ENV string
 func init() {
 	loadEnv()
 	lolVersions := provider.GetVersions()
-	supportLang := provider.GetLang()
+	supportLangs := provider.GetLangs()
 	os.Setenv("LOL_VERSION", lolVersions[0])
-	config.SetLangList(supportLang)
+	config.SetLangList(supportLangs)
 	config.SetVersionList(lolVersions)
 }
 

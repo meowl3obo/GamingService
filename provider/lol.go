@@ -40,7 +40,7 @@ func GetVersions() []string {
 	return response
 }
 
-func GetLang() []string {
+func GetLangs() []string {
 	route := "/api/languages.json"
 	response := []string{}
 	response, statusCode, err := lolRequest[[]string]("GET", route)
