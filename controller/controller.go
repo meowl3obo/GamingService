@@ -3,6 +3,7 @@ package controller
 import (
 	"gaming-service/middleware"
 	"gaming-service/service"
+	lolService "gaming-service/service/lol"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -29,14 +30,14 @@ func (r *Controller) Router() {
 		{
 			localLol := lol.Group("/:local", middleware.CountryHandler())
 			{
-				localLol.GET("/user/byname", service.GetUserByName)
-				localLol.GET("/:puuid/games", middleware.RegionHandler(), middleware.CountHandler(), service.GetGamesByPuuid)
-				localLol.GET("/game/:matchID", middleware.RegionHandler(), service.GetGameInfo)
-				localLol.GET("/game/:matchID/timeline", middleware.RegionHandler(), service.GetGameTimeLine)
+				localLol.GET("/user/byname", lolService.GetUserByName)
+				localLol.GET("/:puuid/games", middleware.RegionHandler(), middleware.CountHandler(), lolService.GetGamesByPuuid)
+				localLol.GET("/game/:matchID", middleware.RegionHandler(), lolService.GetGameInfo)
+				localLol.GET("/game/:matchID/timeline", middleware.RegionHandler(), lolService.GetGameTimeLine)
 			}
 			assetsLol := lol.Group("/assets", middleware.LangHandler(), middleware.VersionHandler())
 			{
-				assetsLol.GET("/roles", service.GetRoles)
+				assetsLol.GET("/roles", lolService.GetRoles)
 			}
 		}
 	}
