@@ -28,6 +28,10 @@ func GetMatchsByPuuid(c *gin.Context) {
 	region := CountryMap[local]
 	forLoopCount := 0
 
+	if count == "" {
+		count = "10"
+	}
+
 	response := []MatchOverviewResponse{}
 
 	matchIDs, statusCode, errObj := provider.GetMatchsID(region, puuid, count)
