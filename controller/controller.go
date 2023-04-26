@@ -29,7 +29,8 @@ func (r *Controller) Router() {
 		{
 			lol.GET("/:local/user/byname", service.GetUserByName)
 			lol.GET("/:local/:puuid/games", middleware.RegionHandler(), middleware.CountHandler(), service.GetGamesByPuuid)
-			lol.GET("/:local/game/:matchID", middleware.RegionHandler(), service.GetGameByMatchID)
+			lol.GET("/:local/game/:matchID", middleware.RegionHandler(), service.GetGameInfo)
+			lol.GET("/:local/game/:matchID/timeline", middleware.RegionHandler(), service.GetGameTimeLine)
 		}
 	}
 }

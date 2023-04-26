@@ -10,7 +10,7 @@ type RiotUser struct {
 	SummonerLevel int    `json:"summonerLevel"`
 }
 
-type MatchParticipants struct {
+type GamreInfo struct {
 	Metadata struct {
 		DataVersion  string   `json:"dataVersion"`
 		MatchID      string   `json:"matchId"`

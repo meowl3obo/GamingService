@@ -4,7 +4,7 @@ import (
 	. "gaming-service/model"
 )
 
-func ToMatchOverviewResponse(source MatchParticipants) MatchOverviewResponse {
+func ToMatchOverview(source GamreInfo) MatchOverviewResponse {
 	response := MatchOverviewResponse{}
 	participans := []ParticipantOverview{}
 
