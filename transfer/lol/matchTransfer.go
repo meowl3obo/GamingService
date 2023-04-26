@@ -5,7 +5,7 @@ import (
 	"strconv"
 )
 
-func ToMatchOverview(source GameInfo) MatchOverviewResponse {
+func ToMatchOverview(source MatchInfo) MatchOverviewResponse {
 	response := MatchOverviewResponse{}
 	participans := []ParticipantOverview{}
 
@@ -36,7 +36,7 @@ func ToMatchOverview(source GameInfo) MatchOverviewResponse {
 	return response
 }
 
-func ToMatchDetails(source GameInfo) MatchDetailsResponse {
+func ToMatchDetails(source MatchInfo) MatchDetailsResponse {
 	response := MatchDetailsResponse{}
 	participans := []ParticipantDetails{}
 	teams := map[string]TeamDetails{}

@@ -14,27 +14,14 @@ import (
 )
 
 var (
-	matchDetails chan GameInfo
+	matchDetails chan MatchInfo
 )
 
 func init() {
-	matchDetails = make(chan GameInfo)
+	matchDetails = make(chan MatchInfo)
 }
 
-func GetUserByName(c *gin.Context) {
-	local := c.Param("local")
-	name := c.Query("name")
-
-	userData, statusCode, errObj := provider.GetUserByName(local, name)
-
-	if statusCode != 200 {
-		c.JSON(statusCode, errObj)
-	} else {
-		c.JSON(statusCode, userData)
-	}
-}
-
-func GetGamesByPuuid(c *gin.Context) {
+func GetMatchsByPuuid(c *gin.Context) {
 	local := c.Param("local")
 	puuid := c.Param("puuid")
 	count := c.Query("count")
@@ -43,7 +30,7 @@ func GetGamesByPuuid(c *gin.Context) {
 
 	response := []MatchOverviewResponse{}
 
-	matchIDs, statusCode, errObj := provider.GetGamesID(region, puuid, count)
+	matchIDs, statusCode, errObj := provider.GetMatchsID(region, puuid, count)
 
 	if statusCode != 200 {
 		c.JSON(statusCode, errObj)
@@ -51,7 +38,7 @@ func GetGamesByPuuid(c *gin.Context) {
 	}
 
 	for _, matchID := range matchIDs {
-		go getGameInfo(region, matchID)
+		go getMatchInfo(region, matchID)
 		time.Sleep(10 * time.Millisecond)
 	}
 	for forLoopCount < len(matchIDs) {
@@ -67,39 +54,39 @@ func GetGamesByPuuid(c *gin.Context) {
 	c.JSON(http.StatusOK, response)
 }
 
-func GetGameInfo(c *gin.Context) {
+func GetMatchInfo(c *gin.Context) {
 	local := c.Param("local")
 	matchID := c.Param("matchID")
 	region := CountryMap[local]
 
-	gameInfo, statusCode, errObj := provider.GetGameInfo(region, matchID)
+	matchInfo, statusCode, errObj := provider.GetMatchInfo(region, matchID)
 
 	if statusCode != 200 {
 		c.JSON(statusCode, errObj)
 	} else {
-		c.JSON(statusCode, transfer.ToMatchDetails(gameInfo))
+		c.JSON(statusCode, transfer.ToMatchDetails(matchInfo))
 	}
 }
 
-func GetGameTimeLine(c *gin.Context) {
+func GetMatchTimeLine(c *gin.Context) {
 	local := c.Param("local")
 	matchID := c.Param("matchID")
 	region := CountryMap[local]
 
-	gameTimeline, statusCode, errObj := provider.GetGameTimeline(region, matchID)
+	matchTimeLine, statusCode, errObj := provider.GetMatchTimeLine(region, matchID)
 
 	if statusCode != 200 {
 		c.JSON(statusCode, errObj)
 	} else {
-		c.JSON(statusCode, gameTimeline)
+		c.JSON(statusCode, matchTimeLine)
 	}
 }
 
-func getGameInfo(region string, matchID string) {
-	response := GameInfo{}
-	gameInfo, statusCode, err := provider.GetGameInfo(region, matchID)
+func getMatchInfo(region string, matchID string) {
+	response := MatchInfo{}
+	matchInfo, statusCode, err := provider.GetMatchInfo(region, matchID)
 	if statusCode == 200 {
-		response = gameInfo
+		response = matchInfo
 	} else {
 		fmt.Println(region, matchID)
 		fmt.Println(statusCode, err)
