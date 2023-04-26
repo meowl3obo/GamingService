@@ -1,7 +1,7 @@
-package transfer
+package lolTransfer
 
 import (
-	. "gaming-service/model"
+	. "gaming-service/model/lol"
 	"strconv"
 )
 
@@ -23,6 +23,7 @@ func ToMatchOverview(source GameInfo) MatchOverviewResponse {
 			Deaths:  sourceParticipant.Deaths,
 			Assists: sourceParticipant.Assists,
 			Role:    sourceParticipant.ChampionName,
+			RoleId:  sourceParticipant.ChampionID,
 		}
 		participans = append(participans, participan)
 	}
@@ -54,6 +55,7 @@ func ToMatchDetails(source GameInfo) MatchDetailsResponse {
 			Deaths:     sourceParticipant.Deaths,
 			Assists:    sourceParticipant.Assists,
 			Role:       sourceParticipant.ChampionName,
+			RoleId:     sourceParticipant.ChampionID,
 			Level:      sourceParticipant.ChampLevel,
 			FirstBlood: sourceParticipant.FirstBloodKill,
 			Item: Item{

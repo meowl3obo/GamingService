@@ -1,4 +1,4 @@
-package model
+package lolModel
 
 type RolesDetails struct {
 	Type    string                 `json:"type"`

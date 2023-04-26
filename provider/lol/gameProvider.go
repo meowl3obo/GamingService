@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	. "gaming-service/model"
+	. "gaming-service/model/lol"
 	riot "gaming-service/provider"
 )
 

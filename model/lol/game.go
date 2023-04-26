@@ -1,4 +1,4 @@
-package model
+package lolModel
 
 type RiotUser struct {
 	ID            string `json:"id"`

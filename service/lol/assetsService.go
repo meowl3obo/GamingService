@@ -1,8 +1,10 @@
 package lolService
 
 import (
-	provider "gaming-service/provider/lol"
 	"os"
+
+	provider "gaming-service/provider/lol"
+	transfer "gaming-service/transfer/lol"
 
 	"github.com/gin-gonic/gin"
 )
@@ -22,6 +24,6 @@ func GetRoles(c *gin.Context) {
 	if statusCode != 200 {
 		c.JSON(statusCode, errObj)
 	} else {
-		c.JSON(statusCode, rolesDetails)
+		c.JSON(statusCode, transfer.ToRoleMap(rolesDetails))
 	}
 }

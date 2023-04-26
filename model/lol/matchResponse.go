@@ -1,4 +1,4 @@
-package model
+package lolModel
 
 type MatchOverviewResponse struct {
 	MatchID      string
@@ -27,6 +27,7 @@ type ParticipantOverview struct {
 	Deaths  int // 死亡
 	Assists int // 助攻
 	Role    string
+	RoleId  int
 }
 
 type ParticipantDetails struct {
@@ -37,6 +38,7 @@ type ParticipantDetails struct {
 	Deaths     int // 死亡
 	Assists    int // 助攻
 	Role       string
+	RoleId     int
 	Level      int
 	FirstBlood bool
 	Item       Item

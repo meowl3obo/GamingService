@@ -3,9 +3,9 @@ package lolService
 import (
 	"fmt"
 	. "gaming-service/config"
-	. "gaming-service/model"
+	. "gaming-service/model/lol"
 	provider "gaming-service/provider/lol"
-	transfer "gaming-service/transfer"
+	transfer "gaming-service/transfer/lol"
 	"net/http"
 	"sort"
 	"time"
