@@ -1,6 +1,7 @@
 package model
 
 type MatchOverviewResponse struct {
+	MatchID      string
 	Mode         string
 	StartTime    int64
 	EndTime      int64
@@ -9,6 +10,7 @@ type MatchOverviewResponse struct {
 }
 
 type MatchDetailsResponse struct {
+	MatchID      string
 	Mode         string
 	StartTime    int64
 	EndTime      int64

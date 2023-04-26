@@ -11,6 +11,7 @@ func ToMatchOverviewResponse(source MatchParticipants) MatchOverviewResponse {
 	response.Mode = source.Info.GameMode
 	response.StartTime = source.Info.GameStartTimestamp
 	response.EndTime = source.Info.GameEndTimestamp
+	response.MatchID = source.Metadata.MatchID
 
 	for _, team := range source.Info.Teams {
 		if team.Win {
