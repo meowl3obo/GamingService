@@ -1,11 +1,14 @@
 package service
 
 import (
+	"fmt"
 	. "gaming-service/config"
 	. "gaming-service/model"
 	provider "gaming-service/provider"
 	transfer "gaming-service/transfer"
 	"net/http"
+	"sort"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -48,19 +51,26 @@ func GetGamesByPuuid(c *gin.Context) {
 
 	for _, matchID := range matchIDs {
 		go getGameParticipants(region, matchID)
+		time.Sleep(10 * time.Millisecond)
 	}
 	for len(response) < len(matchIDs) {
 		data := <-matchOverviewChan
 		response = append(response, data)
 	}
+	sort.Slice(response, func(curIndex int, nextIndex int) bool {
+		return response[curIndex].StartTime > response[nextIndex].StartTime
+	})
 	c.JSON(http.StatusOK, response)
 }
 
 func getGameParticipants(region string, matchID string) {
 	response := MatchOverviewResponse{}
-	gameParticipants, statusCode, _ := provider.GetGameParticipants(region, matchID)
+	gameParticipants, statusCode, err := provider.GetGameParticipants(region, matchID)
 	if statusCode == 200 {
 		response = transfer.ToMatchOverviewResponse(gameParticipants)
+	} else {
+		fmt.Println(region, matchID)
+		fmt.Println(statusCode, err)
 	}
 	matchOverviewChan <- response
 }

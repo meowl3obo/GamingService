@@ -64,11 +64,20 @@ func RegionHandler() gin.HandlerFunc {
 func CountHandler() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		count := c.Query("count")
-		_, err := strconv.Atoi(count)
+		intCount, err := strconv.Atoi(count)
 		if err != nil {
 			errObj := ErrorResponse{
 				Code:    http.StatusBadRequest,
 				Message: "count 不為數字",
+			}
+			c.JSON(http.StatusBadRequest, errObj)
+			c.AbortWithStatus(http.StatusBadRequest)
+			return
+		}
+		if intCount > 15 {
+			errObj := ErrorResponse{
+				Code:    http.StatusBadRequest,
+				Message: "count 不能超過15",
 			}
 			c.JSON(http.StatusBadRequest, errObj)
 			c.AbortWithStatus(http.StatusBadRequest)
