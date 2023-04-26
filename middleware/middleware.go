@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"net/http"
+	"strconv"
 
 	. "gaming-service/config"
 	. "gaming-service/model"
@@ -54,6 +55,23 @@ func RegionHandler() gin.HandlerFunc {
 			}
 			c.JSON(http.StatusNotFound, errObj)
 			c.AbortWithStatus(http.StatusNotFound)
+			return
+		}
+		c.Next()
+	}
+}
+
+func CountHandler() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		count := c.Query("count")
+		_, err := strconv.Atoi(count)
+		if err != nil {
+			errObj := ErrorResponse{
+				Code:    http.StatusBadRequest,
+				Message: "count 不為數字",
+			}
+			c.JSON(http.StatusBadRequest, errObj)
+			c.AbortWithStatus(http.StatusBadRequest)
 			return
 		}
 		c.Next()

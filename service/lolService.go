@@ -5,9 +5,18 @@ import (
 	. "gaming-service/model"
 	provider "gaming-service/provider"
 	transfer "gaming-service/transfer"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
+
+var (
+	matchOverviewChan chan MatchOverviewResponse
+)
+
+func init() {
+	matchOverviewChan = make(chan MatchOverviewResponse)
+}
 
 func GetUserByName(c *gin.Context) {
 	local := c.Param("local")
@@ -34,15 +43,26 @@ func GetGamesByPuuid(c *gin.Context) {
 
 	if statusCode != 200 {
 		c.JSON(statusCode, errObj)
+		return
 	}
 
 	for _, matchID := range matchIDs {
-		gameParticipants, statusCode, _ := provider.GetGameParticipants(region, matchID)
-		if statusCode == 200 {
-			response = append(response, transfer.ToMatchOverviewResponse(gameParticipants))
-		}
+		go getGameParticipants(region, matchID)
 	}
-	c.JSON(200, response)
+	for len(response) < len(matchIDs) {
+		data := <-matchOverviewChan
+		response = append(response, data)
+	}
+	c.JSON(http.StatusOK, response)
+}
+
+func getGameParticipants(region string, matchID string) {
+	response := MatchOverviewResponse{}
+	gameParticipants, statusCode, _ := provider.GetGameParticipants(region, matchID)
+	if statusCode == 200 {
+		response = transfer.ToMatchOverviewResponse(gameParticipants)
+	}
+	matchOverviewChan <- response
 }
 
 func GetGameByMatchID(c *gin.Context) {
