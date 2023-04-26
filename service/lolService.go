@@ -4,6 +4,7 @@ import (
 	. "gaming-service/config"
 	. "gaming-service/model"
 	provider "gaming-service/provider"
+	transfer "gaming-service/transfer"
 
 	"github.com/gin-gonic/gin"
 )
@@ -27,7 +28,7 @@ func GetGamesByPuuid(c *gin.Context) {
 	count := c.Query("count")
 	region := CountryMap[local]
 
-	response := []MatchParticipants{}
+	response := []MatchOverviewResponse{}
 
 	matchIDs, statusCode, errObj := provider.GetGamesID(region, puuid, count)
 
@@ -38,7 +39,7 @@ func GetGamesByPuuid(c *gin.Context) {
 	for _, matchID := range matchIDs {
 		gameParticipants, statusCode, _ := provider.GetGameParticipants(region, matchID)
 		if statusCode == 200 {
-			response = append(response, gameParticipants)
+			response = append(response, transfer.ToMatchOverviewResponse(gameParticipants))
 		}
 	}
 	c.JSON(200, response)
