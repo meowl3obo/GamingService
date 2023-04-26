@@ -96,4 +96,3 @@ func GetGameTimeline(region string, matchID string) (MatchTimeline, int, ErrorRe
 
 	return res, statusCode, errObj
 }
-

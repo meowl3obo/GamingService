@@ -1,6 +1,6 @@
 package model
 
-type RiotUser struct{
+type RiotUser struct {
 	ID            string `json:"id"`
 	AccountID     string `json:"accountId"`
 	Puuid         string `json:"puuid"`
@@ -54,7 +54,7 @@ type MatchParticipants struct {
 				DoubleAces                               int     `json:"doubleAces"`
 				DragonTakedowns                          int     `json:"dragonTakedowns"`
 				EarlyLaningPhaseGoldExpAdvantage         int     `json:"earlyLaningPhaseGoldExpAdvantage"`
-				EffectiveHealAndShielding                float64     `json:"effectiveHealAndShielding"`
+				EffectiveHealAndShielding                float64 `json:"effectiveHealAndShielding"`
 				ElderDragonKillsWithOpposingSoul         int     `json:"elderDragonKillsWithOpposingSoul"`
 				ElderDragonMultikills                    int     `json:"elderDragonMultikills"`
 				EnemyChampionImmobilizations             int     `json:"enemyChampionImmobilizations"`
@@ -73,10 +73,10 @@ type MatchParticipants struct {
 				ImmobilizeAndKillWithAlly                int     `json:"immobilizeAndKillWithAlly"`
 				InitialBuffCount                         int     `json:"initialBuffCount"`
 				InitialCrabCount                         int     `json:"initialCrabCount"`
-				JungleCsBefore10Minutes                  float64     `json:"jungleCsBefore10Minutes"`
+				JungleCsBefore10Minutes                  float64 `json:"jungleCsBefore10Minutes"`
 				JunglerTakedownsNearDamagedEpicMonster   int     `json:"junglerTakedownsNearDamagedEpicMonster"`
 				KTurretsDestroyedBeforePlatesFall        int     `json:"kTurretsDestroyedBeforePlatesFall"`
-				Kda                                      float64     `json:"kda"`
+				Kda                                      float64 `json:"kda"`
 				KillAfterHiddenWithAlly                  int     `json:"killAfterHiddenWithAlly"`
 				KillParticipation                        float64 `json:"killParticipation"`
 				KilledChampTookFullTeamDamageSurvived    int     `json:"killedChampTookFullTeamDamageSurvived"`
@@ -92,11 +92,11 @@ type MatchParticipants struct {
 				LaningPhaseGoldExpAdvantage              int     `json:"laningPhaseGoldExpAdvantage"`
 				LegendaryCount                           int     `json:"legendaryCount"`
 				LostAnInhibitor                          int     `json:"lostAnInhibitor"`
-				MaxCsAdvantageOnLaneOpponent             float64     `json:"maxCsAdvantageOnLaneOpponent"`
+				MaxCsAdvantageOnLaneOpponent             float64 `json:"maxCsAdvantageOnLaneOpponent"`
 				MaxKillDeficit                           int     `json:"maxKillDeficit"`
 				MaxLevelLeadLaneOpponent                 int     `json:"maxLevelLeadLaneOpponent"`
 				MejaisFullStackInTime                    int     `json:"mejaisFullStackInTime"`
-				MoreEnemyJungleThanOpponent              float64     `json:"moreEnemyJungleThanOpponent"`
+				MoreEnemyJungleThanOpponent              float64 `json:"moreEnemyJungleThanOpponent"`
 				MultiKillOneSpell                        int     `json:"multiKillOneSpell"`
 				MultiTurretRiftHeraldCount               int     `json:"multiTurretRiftHeraldCount"`
 				Multikills                               int     `json:"multikills"`
@@ -142,8 +142,8 @@ type MatchParticipants struct {
 				TurretsTakenWithRiftHerald               int     `json:"turretsTakenWithRiftHerald"`
 				TwentyMinionsIn3SecondsCount             int     `json:"twentyMinionsIn3SecondsCount"`
 				UnseenRecalls                            int     `json:"unseenRecalls"`
-				VisionScoreAdvantageLaneOpponent         float64     `json:"visionScoreAdvantageLaneOpponent"`
-				VisionScorePerMinute                     float64     `json:"visionScorePerMinute"`
+				VisionScoreAdvantageLaneOpponent         float64 `json:"visionScoreAdvantageLaneOpponent"`
+				VisionScorePerMinute                     float64 `json:"visionScorePerMinute"`
 				WardTakedowns                            int     `json:"wardTakedowns"`
 				WardTakedownsBefore20M                   int     `json:"wardTakedownsBefore20M"`
 				WardsGuarded                             int     `json:"wardsGuarded"`

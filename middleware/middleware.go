@@ -3,8 +3,8 @@ package middleware
 import (
 	"net/http"
 
-	. "gaming-service/model"
 	. "gaming-service/config"
+	. "gaming-service/model"
 
 	"github.com/gin-gonic/gin"
 )
@@ -31,8 +31,8 @@ func CountryHandler() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		local := c.Param("local")
 		if !isCorrectCountry(local) {
-			errObj := ErrorResponse {
-				Code: http.StatusNotFound, 
+			errObj := ErrorResponse{
+				Code:    http.StatusNotFound,
 				Message: "查無該國家",
 			}
 			c.JSON(http.StatusNotFound, errObj)
@@ -48,8 +48,8 @@ func RegionHandler() gin.HandlerFunc {
 		local := c.Param("local")
 		region := CountryMap[local]
 		if region == "" {
-			errObj := ErrorResponse {
-				Code: http.StatusNotFound, 
+			errObj := ErrorResponse{
+				Code:    http.StatusNotFound,
 				Message: "查無該國家",
 			}
 			c.JSON(http.StatusNotFound, errObj)

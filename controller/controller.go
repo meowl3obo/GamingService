@@ -4,8 +4,8 @@ import (
 	"gaming-service/middleware"
 	"gaming-service/service"
 
-	"github.com/gin-gonic/gin"
 	"github.com/gin-contrib/cors"
+	"github.com/gin-gonic/gin"
 )
 
 type Controller struct {
@@ -25,7 +25,7 @@ func (r *Controller) Router() {
 	{
 		api.GET("/version", service.Version)
 
-		lol := api.Group("/lol", middleware.CountryHandler()) 
+		lol := api.Group("/lol", middleware.CountryHandler())
 		{
 			lol.GET("/:local/user/byname", service.GetUserByName)
 			lol.GET("/:local/:puuid/games", middleware.RegionHandler(), service.GetGamesByPuuid)

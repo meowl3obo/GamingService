@@ -1,8 +1,8 @@
 package service
 
 import (
-	. "gaming-service/model"
 	. "gaming-service/config"
+	. "gaming-service/model"
 	provider "gaming-service/provider"
 
 	"github.com/gin-gonic/gin"
@@ -27,7 +27,7 @@ func GetGamesByPuuid(c *gin.Context) {
 	count := c.Query("count")
 	region := CountryMap[local]
 
-	response := []MatchParticipants {}
+	response := []MatchParticipants{}
 
 	matchIDs, statusCode, errObj := provider.GetGamesID(region, puuid, count)
 

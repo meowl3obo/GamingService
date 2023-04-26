@@ -23,7 +23,7 @@ func Request(method string, url string, body io.Reader, headers map[string]strin
 		}
 	}
 	res, err := client.Do(request)
-	
+
 	if err != nil || res.StatusCode != http.StatusOK {
 		response.StatusCode = res.StatusCode
 		if err == nil {
