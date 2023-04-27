@@ -1,12 +1,12 @@
 package lolModel
 
-type RolesDetails struct {
-	Type    string                 `json:"type"`
-	Version string                 `json:"version"`
-	Data    map[string]RoleDetails `json:"data"`
+type AssetsData[T any] struct {
+	Type    string       `json:"type"`
+	Version string       `json:"version"`
+	Data    map[string]T `json:"data"`
 }
 
-type RoleDetails struct {
+type RoleData struct {
 	ID    string `json:"id"`
 	Key   string `json:"key"`
 	Name  string `json:"name"`
@@ -27,39 +27,12 @@ type RoleDetails struct {
 		W      int    `json:"w"`
 		H      int    `json:"h"`
 	} `json:"image"`
-	Tags    []string `json:"tags"`
-	Partype string   `json:"partype"`
-	Stats   struct {
-		Hp                   int     `json:"hp"`
-		Hpperlevel           int     `json:"hpperlevel"`
-		Mp                   int     `json:"mp"`
-		Mpperlevel           float64 `json:"mpperlevel"`
-		Movespeed            int     `json:"movespeed"`
-		Armor                int     `json:"armor"`
-		Armorperlevel        float64 `json:"armorperlevel"`
-		Spellblock           int     `json:"spellblock"`
-		Spellblockperlevel   float64 `json:"spellblockperlevel"`
-		Attackrange          int     `json:"attackrange"`
-		Hpregen              float64 `json:"hpregen"`
-		Hpregenperlevel      float64 `json:"hpregenperlevel"`
-		Mpregen              float64 `json:"mpregen"`
-		Mpregenperlevel      float64 `json:"mpregenperlevel"`
-		Crit                 int     `json:"crit"`
-		Critperlevel         int     `json:"critperlevel"`
-		Attackdamage         float64 `json:"attackdamage"`
-		Attackdamageperlevel float64 `json:"attackdamageperlevel"`
-		Attackspeedperlevel  float64 `json:"attackspeedperlevel"`
-		Attackspeed          float64 `json:"attackspeed"`
-	} `json:"stats"`
+	Tags    []string  `json:"tags"`
+	Partype string    `json:"partype"`
+	Stats   RoleState `json:"stats"`
 }
 
-type ItemsDetails struct {
-	Type    string                 `json:"type"`
-	Version string                 `json:"version"`
-	Data    map[string]ItemDetails `json:"data"`
-}
-
-type ItemDetails struct {
+type ItemData struct {
 	Name        string   `json:"name"`
 	Description string   `json:"description"`
 	Colloq      string   `json:"colloq"`
@@ -93,13 +66,7 @@ type ItemDetails struct {
 	} `json:"stats"`
 }
 
-type SummonersDetails struct {
-	Type    string                     `json:"type"`
-	Version string                     `json:"version"`
-	Data    map[string]SummonerDetails `json:"data"`
-}
-
-type SummonerDetails struct {
+type SummonerData struct {
 	ID           string `json:"id"`
 	Name         string `json:"name"`
 	Description  string `json:"description"`
@@ -131,4 +98,110 @@ type SummonerDetails struct {
 		H      int    `json:"h"`
 	} `json:"image"`
 	Resource string `json:"resource"`
+}
+
+type RoleDetails struct {
+	ID    string `json:"id"`
+	Key   string `json:"key"`
+	Name  string `json:"name"`
+	Title string `json:"title"`
+	Image struct {
+		Full   string `json:"full"`
+		Sprite string `json:"sprite"`
+		Group  string `json:"group"`
+		X      int    `json:"x"`
+		Y      int    `json:"y"`
+		W      int    `json:"w"`
+		H      int    `json:"h"`
+	} `json:"image"`
+	Skins []struct {
+		ID      string `json:"id"`
+		Num     int    `json:"num"`
+		Name    string `json:"name"`
+		Chromas bool   `json:"chromas"`
+	} `json:"skins"`
+	Lore      string   `json:"lore"`
+	Blurb     string   `json:"blurb"`
+	Allytips  []string `json:"allytips"`
+	Enemytips []string `json:"enemytips"`
+	Tags      []string `json:"tags"`
+	Partype   string   `json:"partype"`
+	Info      struct {
+		Attack     int `json:"attack"`
+		Defense    int `json:"defense"`
+		Magic      int `json:"magic"`
+		Difficulty int `json:"difficulty"`
+	} `json:"info"`
+	Stats  RoleState `json:"stats"`
+	Spells []struct {
+		ID          string `json:"id"`
+		Name        string `json:"name"`
+		Description string `json:"description"`
+		Tooltip     string `json:"tooltip"`
+		Leveltip    struct {
+			Label  []string `json:"label"`
+			Effect []string `json:"effect"`
+		} `json:"leveltip"`
+		Maxrank      int    `json:"maxrank"`
+		Cooldown     []int  `json:"cooldown"`
+		CooldownBurn string `json:"cooldownBurn"`
+		Cost         []int  `json:"cost"`
+		CostBurn     string `json:"costBurn"`
+		Datavalues   struct {
+		} `json:"datavalues"`
+		Effect     []any  `json:"effect"`
+		EffectBurn []any  `json:"effectBurn"`
+		Vars       []any  `json:"vars"`
+		CostType   string `json:"costType"`
+		Maxammo    string `json:"maxammo"`
+		Range      []int  `json:"range"`
+		RangeBurn  string `json:"rangeBurn"`
+		Image      struct {
+			Full   string `json:"full"`
+			Sprite string `json:"sprite"`
+			Group  string `json:"group"`
+			X      int    `json:"x"`
+			Y      int    `json:"y"`
+			W      int    `json:"w"`
+			H      int    `json:"h"`
+		} `json:"image"`
+		Resource string `json:"resource"`
+	} `json:"spells"`
+	Passive struct {
+		Name        string `json:"name"`
+		Description string `json:"description"`
+		Image       struct {
+			Full   string `json:"full"`
+			Sprite string `json:"sprite"`
+			Group  string `json:"group"`
+			X      int    `json:"x"`
+			Y      int    `json:"y"`
+			W      int    `json:"w"`
+			H      int    `json:"h"`
+		} `json:"image"`
+	} `json:"passive"`
+	Recommended []any `json:"recommended"`
+}
+
+type RoleState struct {
+	Hp                   int     `json:"hp"`
+	Hpperlevel           int     `json:"hpperlevel"`
+	Mp                   int     `json:"mp"`
+	Mpperlevel           float64 `json:"mpperlevel"`
+	Movespeed            int     `json:"movespeed"`
+	Armor                int     `json:"armor"`
+	Armorperlevel        float64 `json:"armorperlevel"`
+	Spellblock           int     `json:"spellblock"`
+	Spellblockperlevel   float64 `json:"spellblockperlevel"`
+	Attackrange          int     `json:"attackrange"`
+	Hpregen              float64 `json:"hpregen"`
+	Hpregenperlevel      float64 `json:"hpregenperlevel"`
+	Mpregen              float64 `json:"mpregen"`
+	Mpregenperlevel      float64 `json:"mpregenperlevel"`
+	Crit                 int     `json:"crit"`
+	Critperlevel         int     `json:"critperlevel"`
+	Attackdamage         float64 `json:"attackdamage"`
+	Attackdamageperlevel float64 `json:"attackdamageperlevel"`
+	Attackspeedperlevel  float64 `json:"attackspeedperlevel"`
+	Attackspeed          float64 `json:"attackspeed"`
 }

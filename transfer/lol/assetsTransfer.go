@@ -6,7 +6,7 @@ import (
 	. "gaming-service/model/lol"
 )
 
-func ToRoleMap(source RolesDetails) map[string]RoleResponse {
+func ToRoleMap(source AssetsData[RoleData]) map[string]RoleResponse {
 	response := map[string]RoleResponse{}
 
 	for _, roleInfo := range source.Data {
@@ -19,38 +19,15 @@ func ToRoleMap(source RolesDetails) map[string]RoleResponse {
 			Partype: roleInfo.Partype,
 			Blurb:   roleInfo.Blurb,
 			Tags:    roleInfo.Tags,
+			Status:  setRoleStatus(roleInfo.Stats),
 		}
-		roleStatus := RoleStatus{
-			Hp:                   roleInfo.Stats.Hp,
-			Hpperlevel:           roleInfo.Stats.Hpperlevel,
-			Mp:                   roleInfo.Stats.Mp,
-			Mpperlevel:           roleInfo.Stats.Mpperlevel,
-			Movespeed:            roleInfo.Stats.Movespeed,
-			Armor:                roleInfo.Stats.Armor,
-			Armorperlevel:        roleInfo.Stats.Armorperlevel,
-			Spellblock:           roleInfo.Stats.Spellblock,
-			Spellblockperlevel:   roleInfo.Stats.Spellblockperlevel,
-			Attackrange:          roleInfo.Stats.Attackrange,
-			Hpregen:              roleInfo.Stats.Hpregen,
-			Hpregenperlevel:      roleInfo.Stats.Hpregenperlevel,
-			Mpregen:              roleInfo.Stats.Mpregen,
-			Mpregenperlevel:      roleInfo.Stats.Mpregenperlevel,
-			Crit:                 roleInfo.Stats.Crit,
-			Critperlevel:         roleInfo.Stats.Critperlevel,
-			Attackdamage:         roleInfo.Stats.Attackdamage,
-			Attackdamageperlevel: roleInfo.Stats.Attackdamageperlevel,
-			Attackspeedperlevel:  roleInfo.Stats.Attackspeedperlevel,
-			Attackspeed:          roleInfo.Stats.Attackspeed,
-		}
-
-		roleData.Status = roleStatus
 		response[roleInfo.ID] = roleData
 	}
 
 	return response
 }
 
-func ToItemMap(source ItemsDetails) map[string]ItemResponse {
+func ToItemMap(source AssetsData[ItemData]) map[string]ItemResponse {
 	response := map[string]ItemResponse{}
 
 	for key, itemDetails := range source.Data {
@@ -74,7 +51,7 @@ func ToItemMap(source ItemsDetails) map[string]ItemResponse {
 	return response
 }
 
-func ToSummonerMap(source SummonersDetails) map[string]SummonerResponse {
+func ToSummonerMap(source AssetsData[SummonerData]) map[string]SummonerResponse {
 	response := map[string]SummonerResponse{}
 	for key, summonerDetails := range source.Data {
 		summonerData := SummonerResponse{
@@ -90,4 +67,97 @@ func ToSummonerMap(source SummonersDetails) map[string]SummonerResponse {
 	}
 
 	return response
+}
+
+func ToRoleDetails(source AssetsData[RoleDetails], name string) RoleDetailsResponse {
+	data := source.Data[name]
+	response := RoleDetailsResponse{
+		Id:      data.ID,
+		Key:     data.Key,
+		Name:    data.Name,
+		Title:   data.Title,
+		Image:   fmt.Sprintf("%v/%v", data.Image.Group, data.Image.Full),
+		Partype: data.Partype,
+		Blurb:   data.Blurb,
+		Tags:    data.Tags,
+		Status:  setRoleStatus(data.Stats),
+		Skill: SkillGroup{
+			Passive: Skill{
+				Name:        "",
+				Description: "",
+				Colldown:    []int{},
+				Cost:        []int{},
+				CostType:    "",
+				Range:       []int{},
+				Image:       "",
+			},
+			Q: Skill{
+				Name:        "",
+				Description: "",
+				Colldown:    []int{},
+				Cost:        []int{},
+				CostType:    "",
+				Range:       []int{},
+				Image:       ""},
+			W: Skill{
+				Name:        "",
+				Description: "",
+				Colldown:    []int{},
+				Cost:        []int{},
+				CostType:    "",
+				Range:       []int{},
+				Image:       ""},
+			E: Skill{
+				Name:        "",
+				Description: "",
+				Colldown:    []int{},
+				Cost:        []int{},
+				CostType:    "",
+				Range:       []int{},
+				Image:       ""},
+			R: Skill{
+				Name:        "",
+				Description: "",
+				Colldown:    []int{},
+				Cost:        []int{},
+				CostType:    "",
+				Range:       []int{},
+				Image:       ""},
+		},
+	}
+
+	return response
+}
+
+func setRoleStatus(stats RoleState) RoleStatus {
+	roleStatus := RoleStatus{
+		Hp:                   stats.Hp,
+		Hpperlevel:           stats.Hpperlevel,
+		Mp:                   stats.Mp,
+		Mpperlevel:           stats.Mpperlevel,
+		Movespeed:            stats.Movespeed,
+		Armor:                stats.Armor,
+		Armorperlevel:        stats.Armorperlevel,
+		Spellblock:           stats.Spellblock,
+		Spellblockperlevel:   stats.Spellblockperlevel,
+		Attackrange:          stats.Attackrange,
+		Hpregen:              stats.Hpregen,
+		Hpregenperlevel:      stats.Hpregenperlevel,
+		Mpregen:              stats.Mpregen,
+		Mpregenperlevel:      stats.Mpregenperlevel,
+		Crit:                 stats.Crit,
+		Critperlevel:         stats.Critperlevel,
+		Attackdamage:         stats.Attackdamage,
+		Attackdamageperlevel: stats.Attackdamageperlevel,
+		Attackspeedperlevel:  stats.Attackspeedperlevel,
+		Attackspeed:          stats.Attackspeed,
+	}
+
+	return roleStatus
+}
+
+func setSkill() Skill {
+	skill := Skill{}
+
+	return skill
 }

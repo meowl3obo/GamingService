@@ -30,9 +30,9 @@ func GetLangs() []string {
 	return response
 }
 
-func GetRolesDetails(version string, lang string) (RolesDetails, int, ErrorResponse) {
+func GetRolesData(version string, lang string) (AssetsData[RoleData], int, ErrorResponse) {
 	route := fmt.Sprintf("/cdn/%v/data/%v/champion.json", version, lang)
-	rolesDetails, statusCode, err := riot.LolRequest[RolesDetails]("GET", route)
+	rolesDetails, statusCode, err := riot.LolRequest[AssetsData[RoleData]]("GET", route)
 	errObj := ErrorResponse{}
 	if err != nil {
 		errObj = ErrorResponse{
@@ -43,9 +43,22 @@ func GetRolesDetails(version string, lang string) (RolesDetails, int, ErrorRespo
 	return rolesDetails, statusCode, errObj
 }
 
-func GetItems(version string, lang string) (ItemsDetails, int, ErrorResponse) {
+func GetRoleData(version string, lang string, name string) (AssetsData[RoleDetails], int, ErrorResponse) {
+	route := fmt.Sprintf("/cdn/%v/data/%v/champion/%v.json", version, lang, name)
+	roleDetails, statusCode, err := riot.LolRequest[AssetsData[RoleDetails]]("GET", route)
+	errObj := ErrorResponse{}
+	if err != nil {
+		errObj = ErrorResponse{
+			Code:    statusCode,
+			Message: err.Error(),
+		}
+	}
+	return roleDetails, statusCode, errObj
+}
+
+func GetItems(version string, lang string) (AssetsData[ItemData], int, ErrorResponse) {
 	route := fmt.Sprintf("/cdn/%v/data/%v/item.json", version, lang)
-	rolesDetails, statusCode, err := riot.LolRequest[ItemsDetails]("GET", route)
+	rolesDetails, statusCode, err := riot.LolRequest[AssetsData[ItemData]]("GET", route)
 	errObj := ErrorResponse{}
 	if err != nil {
 		errObj = ErrorResponse{
@@ -56,9 +69,9 @@ func GetItems(version string, lang string) (ItemsDetails, int, ErrorResponse) {
 	return rolesDetails, statusCode, errObj
 }
 
-func GetSummoners(version string, lang string) (SummonersDetails, int, ErrorResponse) {
+func GetSummoners(version string, lang string) (AssetsData[SummonerData], int, ErrorResponse) {
 	route := fmt.Sprintf("/cdn/%v/data/%v/summoner.json", version, lang)
-	summonersDetails, statusCode, err := riot.LolRequest[SummonersDetails]("GET", route)
+	summonersDetails, statusCode, err := riot.LolRequest[AssetsData[SummonerData]]("GET", route)
 	errObj := ErrorResponse{}
 	if err != nil {
 		errObj = ErrorResponse{

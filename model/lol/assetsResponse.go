@@ -60,3 +60,34 @@ type SummonerResponse struct {
 	Range       int
 	Image       string
 }
+
+type RoleDetailsResponse struct {
+	Id      string
+	Key     string
+	Name    string
+	Title   string
+	Image   string
+	Partype string
+	Blurb   string
+	Tags    []string
+	Status  RoleStatus
+	Skill   SkillGroup
+}
+
+type SkillGroup struct {
+	Passive Skill
+	Q       Skill
+	W       Skill
+	E       Skill
+	R       Skill
+}
+
+type Skill struct {
+	Name        string
+	Description string
+	Colldown    []int
+	Cost        []int
+	CostType    string
+	Range       []int
+	Image       string
+}
