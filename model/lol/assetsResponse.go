@@ -50,3 +50,13 @@ type ItemGold struct {
 	Total int
 	Sell  int
 }
+
+type SummonerResponse struct {
+	Id          string
+	Name        string
+	Description string
+	Cooldown    int
+	Key         string
+	Range       int
+	Image       string
+}

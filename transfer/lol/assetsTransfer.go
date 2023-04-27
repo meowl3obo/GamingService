@@ -44,7 +44,7 @@ func ToRoleMap(source RolesDetails) map[string]RoleResponse {
 		}
 
 		roleData.Status = roleStatus
-		response[roleInfo.Key] = roleData
+		response[roleInfo.ID] = roleData
 	}
 
 	return response
@@ -69,6 +69,24 @@ func ToItemMap(source ItemsDetails) map[string]ItemResponse {
 		}
 		itemData.Gold = itemGold
 		response[key] = itemData
+	}
+
+	return response
+}
+
+func ToSummonerMap(source SummonersDetails) map[string]SummonerResponse {
+	response := map[string]SummonerResponse{}
+	for key, summonerDetails := range source.Data {
+		summonerData := SummonerResponse{
+			Id:          summonerDetails.ID,
+			Name:        summonerDetails.Name,
+			Description: summonerDetails.Description,
+			Cooldown:    summonerDetails.Cooldown[0],
+			Key:         summonerDetails.Key,
+			Range:       summonerDetails.Range[0],
+			Image:       fmt.Sprintf("%v/%v", summonerDetails.Image.Group, summonerDetails.Image.Full),
+		}
+		response[key] = summonerData
 	}
 
 	return response

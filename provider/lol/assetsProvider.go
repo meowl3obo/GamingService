@@ -54,5 +54,17 @@ func GetItems(version string, lang string) (ItemsDetails, int, ErrorResponse) {
 		}
 	}
 	return rolesDetails, statusCode, errObj
+}
 
+func GetSummoners(version string, lang string) (SummonersDetails, int, ErrorResponse) {
+	route := fmt.Sprintf("/cdn/%v/data/%v/summoner.json", version, lang)
+	summonersDetails, statusCode, err := riot.LolRequest[SummonersDetails]("GET", route)
+	errObj := ErrorResponse{}
+	if err != nil {
+		errObj = ErrorResponse{
+			Code:    statusCode,
+			Message: err.Error(),
+		}
+	}
+	return summonersDetails, statusCode, errObj
 }

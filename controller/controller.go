@@ -45,6 +45,7 @@ func (r *Controller) Router() {
 			{
 				assetsLol.GET("/roles", lolService.GetRoles)
 				assetsLol.GET("/items", lolService.GetItems)
+				assetsLol.GET("/summoners", lolService.GetSummoners)
 			}
 		}
 	}
