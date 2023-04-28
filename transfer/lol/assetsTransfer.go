@@ -87,10 +87,10 @@ func ToRoleDetails(source AssetsData[RoleDetails], name string) RoleDetailsRespo
 				Description: data.Passive.Description,
 				Image:       setImageRoute(data.Passive.Image),
 			},
-			Q: setSkill(data.Spells[0]),
-			W: setSkill(data.Spells[1]),
-			E: setSkill(data.Spells[2]),
-			R: setSkill(data.Spells[3]),
+			Q: setSkill(data.Spells[0], data.Partype),
+			W: setSkill(data.Spells[1], data.Partype),
+			E: setSkill(data.Spells[2], data.Partype),
+			R: setSkill(data.Spells[3], data.Partype),
 		},
 	}
 
@@ -124,15 +124,17 @@ func setRoleStatus(stats RoleState) RoleStatus {
 	return roleStatus
 }
 
-func setSkill(sourceSkill RoleSkill) Skill {
+func setSkill(sourceSkill RoleSkill, partype string) Skill {
 	skill := Skill{
-		Name:        sourceSkill.Name,
-		Description: sourceSkill.Description,
-		Cooldown:    sourceSkill.Cooldown,
-		Cost:        sourceSkill.Cost,
-		CostType:    sourceSkill.CostType,
-		Range:       sourceSkill.Range,
-		Image:       setImageRoute(sourceSkill.Image),
+		Name:         sourceSkill.Name,
+		Description:  sourceSkill.Description,
+		Tooltip:      sourceSkill.Tooltip,
+		Cooldown:     sourceSkill.Cooldown,
+		Cost:         sourceSkill.Cost,
+		CostType:     partype,
+		CostTemplate: sourceSkill.Resource,
+		Range:        sourceSkill.Range,
+		Image:        setImageRoute(sourceSkill.Image),
 	}
 
 	return skill

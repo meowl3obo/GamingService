@@ -89,11 +89,13 @@ type Passive struct {
 }
 
 type Skill struct {
-	Name        string
-	Description string
-	Cooldown    []float64
-	Cost        []int
-	CostType    string
-	Range       []int
-	Image       string
+	Name         string
+	Description  string
+	Tooltip      string
+	Cooldown     []float64
+	Cost         []int
+	CostType     string
+	CostTemplate string
+	Range        []int
+	Image        string
 }
