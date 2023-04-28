@@ -8,9 +8,9 @@ import (
 	riot "gaming-service/provider"
 )
 
-func GetRoleSkillDetails(mainVersion string, name string) (SkillDetail, int, ErrorResponse) {
+func GetRoleSkillDetails(mainVersion string, name string) (map[string]SkillDetail, int, ErrorResponse) {
 	route := fmt.Sprintf("/%v/game/data/characters/%v/%v.bin.json", mainVersion, name, name)
-	roleDetails, statusCode, err := riot.CommunityRequest[SkillDetail]("GET", route)
+	roleDetails, statusCode, err := riot.CommunityRequest[map[string]SkillDetail]("GET", route)
 	errObj := ErrorResponse{}
 	if err != nil {
 		errObj = ErrorResponse{

@@ -50,7 +50,6 @@ func CommunityRequest[T any](method string, route string) (T, int, error) {
 	var response T
 	baseUrl := os.Getenv("LOL_COMMUNITY_API")
 	url := fmt.Sprintf("%v%v", baseUrl, route)
-	fmt.Println(url)
 	res, err := Request(method, url, nil, nil)
 	if err != nil {
 		return response, res.StatusCode, err
