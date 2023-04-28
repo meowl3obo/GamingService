@@ -1,8 +1,11 @@
 package lolService
 
 import (
+	"fmt"
 	"net/http"
 	"os"
+	"regexp"
+	"strings"
 
 	. "gaming-service/model/lol"
 	provider "gaming-service/provider/lol"
@@ -60,6 +63,12 @@ func GetRole(c *gin.Context) {
 	if statusCode != 200 {
 		c.JSON(statusCode, errObj)
 	} else {
+		versionReg, _ := regexp.Compile(`\.\d$`)
+		mainVersion := versionReg.ReplaceAllString(version, "")
+		fmt.Println(mainVersion)
+		test, statusCode, _ := provider.GetRoleSkillDetails(mainVersion, strings.ToLower(name))
+		fmt.Println(test)
+
 		roleDetails := transfer.ToRoleDetails(roleDetails, name)
 		cacheRoleDetails[version][lang][name] = roleDetails
 		c.JSON(statusCode, roleDetails)
