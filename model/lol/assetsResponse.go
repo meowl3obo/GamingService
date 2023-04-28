@@ -75,17 +75,23 @@ type RoleDetailsResponse struct {
 }
 
 type SkillGroup struct {
-	Passive Skill
+	Passive Passive
 	Q       Skill
 	W       Skill
 	E       Skill
 	R       Skill
 }
 
+type Passive struct {
+	Name        string
+	Description string
+	Image       string
+}
+
 type Skill struct {
 	Name        string
 	Description string
-	Colldown    []int
+	Cooldown    []float64
 	Cost        []int
 	CostType    string
 	Range       []int

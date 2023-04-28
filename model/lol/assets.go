@@ -18,37 +18,21 @@ type RoleData struct {
 		Magic      int `json:"magic"`
 		Difficulty int `json:"difficulty"`
 	} `json:"info"`
-	Image struct {
-		Full   string `json:"full"`
-		Sprite string `json:"sprite"`
-		Group  string `json:"group"`
-		X      int    `json:"x"`
-		Y      int    `json:"y"`
-		W      int    `json:"w"`
-		H      int    `json:"h"`
-	} `json:"image"`
-	Tags    []string  `json:"tags"`
-	Partype string    `json:"partype"`
-	Stats   RoleState `json:"stats"`
+	Image   AssetsImage `json:"image"`
+	Tags    []string    `json:"tags"`
+	Partype string      `json:"partype"`
+	Stats   RoleState   `json:"stats"`
 }
 
 type ItemData struct {
-	Name        string   `json:"name"`
-	Description string   `json:"description"`
-	Colloq      string   `json:"colloq"`
-	Plaintext   string   `json:"plaintext"`
-	Into        []string `json:"into"`
-	From        []string `json:"from"`
-	Image       struct {
-		Full   string `json:"full"`
-		Sprite string `json:"sprite"`
-		Group  string `json:"group"`
-		X      int    `json:"x"`
-		Y      int    `json:"y"`
-		W      int    `json:"w"`
-		H      int    `json:"h"`
-	} `json:"image"`
-	Gold struct {
+	Name        string      `json:"name"`
+	Description string      `json:"description"`
+	Colloq      string      `json:"colloq"`
+	Plaintext   string      `json:"plaintext"`
+	Into        []string    `json:"into"`
+	From        []string    `json:"from"`
+	Image       AssetsImage `json:"image"`
+	Gold        struct {
 		Base        int  `json:"base"`
 		Purchasable bool `json:"purchasable"`
 		Total       int  `json:"total"`
@@ -78,42 +62,26 @@ type SummonerData struct {
 	CostBurn     string `json:"costBurn"`
 	Datavalues   struct {
 	} `json:"datavalues"`
-	Effect        []any    `json:"effect"`
-	EffectBurn    []any    `json:"effectBurn"`
-	Vars          []any    `json:"vars"`
-	Key           string   `json:"key"`
-	SummonerLevel int      `json:"summonerLevel"`
-	Modes         []string `json:"modes"`
-	CostType      string   `json:"costType"`
-	Maxammo       string   `json:"maxammo"`
-	Range         []int    `json:"range"`
-	RangeBurn     string   `json:"rangeBurn"`
-	Image         struct {
-		Full   string `json:"full"`
-		Sprite string `json:"sprite"`
-		Group  string `json:"group"`
-		X      int    `json:"x"`
-		Y      int    `json:"y"`
-		W      int    `json:"w"`
-		H      int    `json:"h"`
-	} `json:"image"`
-	Resource string `json:"resource"`
+	Effect        []any       `json:"effect"`
+	EffectBurn    []any       `json:"effectBurn"`
+	Vars          []any       `json:"vars"`
+	Key           string      `json:"key"`
+	SummonerLevel int         `json:"summonerLevel"`
+	Modes         []string    `json:"modes"`
+	CostType      string      `json:"costType"`
+	Maxammo       string      `json:"maxammo"`
+	Range         []int       `json:"range"`
+	RangeBurn     string      `json:"rangeBurn"`
+	Image         AssetsImage `json:"image"`
+	Resource      string      `json:"resource"`
 }
 
 type RoleDetails struct {
-	ID    string `json:"id"`
-	Key   string `json:"key"`
-	Name  string `json:"name"`
-	Title string `json:"title"`
-	Image struct {
-		Full   string `json:"full"`
-		Sprite string `json:"sprite"`
-		Group  string `json:"group"`
-		X      int    `json:"x"`
-		Y      int    `json:"y"`
-		W      int    `json:"w"`
-		H      int    `json:"h"`
-	} `json:"image"`
+	ID    string      `json:"id"`
+	Key   string      `json:"key"`
+	Name  string      `json:"name"`
+	Title string      `json:"title"`
+	Image AssetsImage `json:"image"`
 	Skins []struct {
 		ID      string `json:"id"`
 		Num     int    `json:"num"`
@@ -132,55 +100,10 @@ type RoleDetails struct {
 		Magic      int `json:"magic"`
 		Difficulty int `json:"difficulty"`
 	} `json:"info"`
-	Stats  RoleState `json:"stats"`
-	Spells []struct {
-		ID          string `json:"id"`
-		Name        string `json:"name"`
-		Description string `json:"description"`
-		Tooltip     string `json:"tooltip"`
-		Leveltip    struct {
-			Label  []string `json:"label"`
-			Effect []string `json:"effect"`
-		} `json:"leveltip"`
-		Maxrank      int    `json:"maxrank"`
-		Cooldown     []int  `json:"cooldown"`
-		CooldownBurn string `json:"cooldownBurn"`
-		Cost         []int  `json:"cost"`
-		CostBurn     string `json:"costBurn"`
-		Datavalues   struct {
-		} `json:"datavalues"`
-		Effect     []any  `json:"effect"`
-		EffectBurn []any  `json:"effectBurn"`
-		Vars       []any  `json:"vars"`
-		CostType   string `json:"costType"`
-		Maxammo    string `json:"maxammo"`
-		Range      []int  `json:"range"`
-		RangeBurn  string `json:"rangeBurn"`
-		Image      struct {
-			Full   string `json:"full"`
-			Sprite string `json:"sprite"`
-			Group  string `json:"group"`
-			X      int    `json:"x"`
-			Y      int    `json:"y"`
-			W      int    `json:"w"`
-			H      int    `json:"h"`
-		} `json:"image"`
-		Resource string `json:"resource"`
-	} `json:"spells"`
-	Passive struct {
-		Name        string `json:"name"`
-		Description string `json:"description"`
-		Image       struct {
-			Full   string `json:"full"`
-			Sprite string `json:"sprite"`
-			Group  string `json:"group"`
-			X      int    `json:"x"`
-			Y      int    `json:"y"`
-			W      int    `json:"w"`
-			H      int    `json:"h"`
-		} `json:"image"`
-	} `json:"passive"`
-	Recommended []any `json:"recommended"`
+	Stats       RoleState   `json:"stats"`
+	Spells      []RoleSkill `json:"spells"`
+	Passive     RolePassive `json:"passive"`
+	Recommended []any       `json:"recommended"`
 }
 
 type RoleState struct {
@@ -204,4 +127,47 @@ type RoleState struct {
 	Attackdamageperlevel float64 `json:"attackdamageperlevel"`
 	Attackspeedperlevel  float64 `json:"attackspeedperlevel"`
 	Attackspeed          float64 `json:"attackspeed"`
+}
+
+type RoleSkill struct {
+	ID          string `json:"id"`
+	Name        string `json:"name"`
+	Description string `json:"description"`
+	Tooltip     string `json:"tooltip"`
+	Leveltip    struct {
+		Label  []string `json:"label"`
+		Effect []string `json:"effect"`
+	} `json:"leveltip"`
+	Maxrank      int       `json:"maxrank"`
+	Cooldown     []float64 `json:"cooldown"`
+	CooldownBurn string    `json:"cooldownBurn"`
+	Cost         []int     `json:"cost"`
+	CostBurn     string    `json:"costBurn"`
+	Datavalues   struct {
+	} `json:"datavalues"`
+	Effect     []any       `json:"effect"`
+	EffectBurn []any       `json:"effectBurn"`
+	Vars       []any       `json:"vars"`
+	CostType   string      `json:"costType"`
+	Maxammo    string      `json:"maxammo"`
+	Range      []int       `json:"range"`
+	RangeBurn  string      `json:"rangeBurn"`
+	Image      AssetsImage `json:"image"`
+	Resource   string      `json:"resource"`
+}
+
+type RolePassive struct {
+	Name        string      `json:"name"`
+	Description string      `json:"description"`
+	Image       AssetsImage `json:"image"`
+}
+
+type AssetsImage struct {
+	Full   string `json:"full"`
+	Sprite string `json:"sprite"`
+	Group  string `json:"group"`
+	X      int    `json:"x"`
+	Y      int    `json:"y"`
+	W      int    `json:"w"`
+	H      int    `json:"h"`
 }

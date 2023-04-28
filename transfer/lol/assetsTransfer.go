@@ -15,7 +15,7 @@ func ToRoleMap(source AssetsData[RoleData]) map[string]RoleResponse {
 			Key:     roleInfo.Key,
 			Name:    roleInfo.Name,
 			Title:   roleInfo.Title,
-			Image:   fmt.Sprintf("%v/%v", roleInfo.Image.Group, roleInfo.Image.Full),
+			Image:   setImageRoute(roleInfo.Image),
 			Partype: roleInfo.Partype,
 			Blurb:   roleInfo.Blurb,
 			Tags:    roleInfo.Tags,
@@ -36,7 +36,7 @@ func ToItemMap(source AssetsData[ItemData]) map[string]ItemResponse {
 			Description: itemDetails.Description,
 			Into:        itemDetails.Into,
 			From:        itemDetails.From,
-			Image:       fmt.Sprintf("%v/%v", itemDetails.Image.Group, itemDetails.Image.Full),
+			Image:       setImageRoute(itemDetails.Image),
 			Tags:        itemDetails.Tags,
 		}
 		itemGold := ItemGold{
@@ -61,7 +61,7 @@ func ToSummonerMap(source AssetsData[SummonerData]) map[string]SummonerResponse 
 			Cooldown:    summonerDetails.Cooldown[0],
 			Key:         summonerDetails.Key,
 			Range:       summonerDetails.Range[0],
-			Image:       fmt.Sprintf("%v/%v", summonerDetails.Image.Group, summonerDetails.Image.Full),
+			Image:       setImageRoute(summonerDetails.Image),
 		}
 		response[key] = summonerData
 	}
@@ -76,53 +76,21 @@ func ToRoleDetails(source AssetsData[RoleDetails], name string) RoleDetailsRespo
 		Key:     data.Key,
 		Name:    data.Name,
 		Title:   data.Title,
-		Image:   fmt.Sprintf("%v/%v", data.Image.Group, data.Image.Full),
+		Image:   setImageRoute(data.Image),
 		Partype: data.Partype,
 		Blurb:   data.Blurb,
 		Tags:    data.Tags,
 		Status:  setRoleStatus(data.Stats),
 		Skill: SkillGroup{
-			Passive: Skill{
-				Name:        "",
-				Description: "",
-				Colldown:    []int{},
-				Cost:        []int{},
-				CostType:    "",
-				Range:       []int{},
-				Image:       "",
+			Passive: Passive{
+				Name:        data.Passive.Name,
+				Description: data.Passive.Description,
+				Image:       setImageRoute(data.Passive.Image),
 			},
-			Q: Skill{
-				Name:        "",
-				Description: "",
-				Colldown:    []int{},
-				Cost:        []int{},
-				CostType:    "",
-				Range:       []int{},
-				Image:       ""},
-			W: Skill{
-				Name:        "",
-				Description: "",
-				Colldown:    []int{},
-				Cost:        []int{},
-				CostType:    "",
-				Range:       []int{},
-				Image:       ""},
-			E: Skill{
-				Name:        "",
-				Description: "",
-				Colldown:    []int{},
-				Cost:        []int{},
-				CostType:    "",
-				Range:       []int{},
-				Image:       ""},
-			R: Skill{
-				Name:        "",
-				Description: "",
-				Colldown:    []int{},
-				Cost:        []int{},
-				CostType:    "",
-				Range:       []int{},
-				Image:       ""},
+			Q: setSkill(data.Spells[0]),
+			W: setSkill(data.Spells[1]),
+			E: setSkill(data.Spells[2]),
+			R: setSkill(data.Spells[3]),
 		},
 	}
 
@@ -156,8 +124,20 @@ func setRoleStatus(stats RoleState) RoleStatus {
 	return roleStatus
 }
 
-func setSkill() Skill {
-	skill := Skill{}
+func setSkill(sourceSkill RoleSkill) Skill {
+	skill := Skill{
+		Name:        sourceSkill.Name,
+		Description: sourceSkill.Description,
+		Cooldown:    sourceSkill.Cooldown,
+		Cost:        sourceSkill.Cost,
+		CostType:    sourceSkill.CostType,
+		Range:       sourceSkill.Range,
+		Image:       setImageRoute(sourceSkill.Image),
+	}
 
 	return skill
+}
+
+func setImageRoute(sourceImage AssetsImage) string {
+	return fmt.Sprintf("%v/%v", sourceImage.Group, sourceImage.Full)
 }

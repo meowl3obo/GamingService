@@ -44,7 +44,7 @@ func GetRole(c *gin.Context) {
 	if statusCode != 200 {
 		c.JSON(statusCode, errObj)
 	} else {
-		c.JSON(statusCode, roleDetails)
+		c.JSON(statusCode, transfer.ToRoleDetails(roleDetails, name))
 	}
 }
 
