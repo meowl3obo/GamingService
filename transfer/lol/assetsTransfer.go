@@ -2,8 +2,14 @@ package lolTransfer
 
 import (
 	"fmt"
+	"math"
+	"regexp"
+	"strconv"
+	"strings"
 
 	. "gaming-service/model/lol"
+
+	"golang.org/x/exp/slices"
 )
 
 func ToRoleMap(source AssetsData[RoleData]) map[string]RoleResponse {
@@ -69,8 +75,12 @@ func ToSummonerMap(source AssetsData[SummonerData]) map[string]SummonerResponse 
 	return response
 }
 
-func ToRoleDetails(source AssetsData[RoleDetails], name string) RoleDetailsResponse {
+func ToRoleDetails(source AssetsData[RoleDetails], name string, skillDetails map[string]SkillDetail) RoleDetailsResponse {
 	data := source.Data[name]
+	skillQKeys := fmt.Sprintf("Characters/%v/Spells/%vQAbility/%vQ", name, name, name)
+	skillWKeys := fmt.Sprintf("Characters/%v/Spells/%vWAbility/%vW", name, name, name)
+	skillEKeys := fmt.Sprintf("Characters/%v/Spells/%vEAbility/%vE", name, name, name)
+	skillRKeys := fmt.Sprintf("Characters/%v/Spells/%vRAbility/%vR", name, name, name)
 	response := RoleDetailsResponse{
 		Id:      data.ID,
 		Key:     data.Key,
@@ -87,10 +97,10 @@ func ToRoleDetails(source AssetsData[RoleDetails], name string) RoleDetailsRespo
 				Description: data.Passive.Description,
 				Image:       setImageRoute(data.Passive.Image),
 			},
-			Q: setSkill(data.Spells[0], data.Partype),
-			W: setSkill(data.Spells[1], data.Partype),
-			E: setSkill(data.Spells[2], data.Partype),
-			R: setSkill(data.Spells[3], data.Partype),
+			Q: setSkill(data.Spells[0], data.Partype, skillDetails[skillQKeys].MSpell.MDataValues),
+			W: setSkill(data.Spells[1], data.Partype, skillDetails[skillWKeys].MSpell.MDataValues),
+			E: setSkill(data.Spells[2], data.Partype, skillDetails[skillEKeys].MSpell.MDataValues),
+			R: setSkill(data.Spells[3], data.Partype, skillDetails[skillRKeys].MSpell.MDataValues),
 		},
 	}
 
@@ -124,11 +134,11 @@ func setRoleStatus(stats RoleState) RoleStatus {
 	return roleStatus
 }
 
-func setSkill(sourceSkill RoleSkill, partype string) Skill {
+func setSkill(sourceSkill RoleSkill, partype string, values []SKillDataValues) Skill {
 	skill := Skill{
 		Name:         sourceSkill.Name,
 		Description:  sourceSkill.Description,
-		Tooltip:      sourceSkill.Tooltip,
+		Tooltip:      setTooltip(values, sourceSkill.Tooltip),
 		Cooldown:     sourceSkill.Cooldown,
 		Cost:         sourceSkill.Cost,
 		CostType:     partype,
@@ -138,6 +148,74 @@ func setSkill(sourceSkill RoleSkill, partype string) Skill {
 	}
 
 	return skill
+}
+
+func setTooltip(values []SKillDataValues, tooltip string) string {
+	spellCostReg, _ := regexp.Compile(`{{ \S+ }}`)
+	spellCostKeyReg, _ := regexp.Compile(`\w+`)
+	spellCostAdditionReg, _ := regexp.Compile(`\d+`)
+	damageReg, _ := regexp.Compile(`^\wdamage`)
+	damageRatioReg, _ := regexp.Compile(`^\wtotal\w+ratio`)
+	spellCosts := spellCostReg.FindAllString(tooltip, -1)
+	for _, spellCost := range spellCosts {
+		checkCost := spellCostKeyReg.FindString(spellCost)
+		additionString := spellCostAdditionReg.FindString(spellCost)
+		if damageReg.MatchString(checkCost) {
+			valueString := ""
+			valueIndex := slices.IndexFunc(values, func(value SKillDataValues) bool {
+				return strings.Contains(strings.ToLower(value.MName), "basedamage")
+			})
+			ratioIndex := slices.IndexFunc(values, func(value SKillDataValues) bool {
+				return damageRatioReg.MatchString(strings.ToLower(value.MName))
+			})
+			if valueIndex > -1 {
+				value := values[valueIndex]
+				valueString = fmt.Sprintf("%v%v", valueString, reduceSkill(value, additionString))
+			}
+			if ratioIndex > -1 {
+				value := values[ratioIndex]
+				valueString = fmt.Sprintf("%v + %v", valueString, reduceSkillRatio(value))
+			}
+			tooltip = strings.ReplaceAll(tooltip, spellCost, valueString)
+		} else {
+			valueIndex := slices.IndexFunc(values, func(value SKillDataValues) bool {
+				return strings.ToLower(value.MName) == checkCost
+			})
+			if valueIndex > -1 {
+				value := values[valueIndex]
+				valueString := reduceSkill(value, additionString)
+				tooltip = strings.ReplaceAll(tooltip, spellCost, valueString)
+			}
+		}
+	}
+	return tooltip
+}
+
+func reduceSkill(value SKillDataValues, additionString string) string {
+	valueString := ""
+	for i, skillValue := range value.MValues {
+		if i != 0 && i != (len(value.MValues)-1) {
+			if additionString != "" {
+				addition, err := strconv.ParseFloat(additionString, 64)
+				if err == nil {
+					skillValue = math.Round(math.Abs(skillValue*addition)*100) / 100
+				}
+			}
+			valueString = fmt.Sprintf("%v/%v", valueString, skillValue)
+		}
+	}
+	return strings.Replace(valueString, "/", "", 1)
+}
+
+func reduceSkillRatio(value SKillDataValues) string {
+	valueString := "("
+	for i, skillValue := range value.MValues {
+		if i != 0 && i != (len(value.MValues)-1) {
+			valueString = fmt.Sprintf("%v/%v%v", valueString, math.Round(skillValue*10000)/100, "%")
+		}
+	}
+	return fmt.Sprintf("%v)", strings.Replace(valueString, "/", "", 1))
+
 }
 
 func setImageRoute(sourceImage AssetsImage) string {
