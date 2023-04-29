@@ -136,18 +136,34 @@ func setRoleStatus(stats RoleState) RoleStatus {
 
 func setSkill(sourceSkill RoleSkill, partype string, values []SKillDataValues) Skill {
 	skill := Skill{
-		Name:         sourceSkill.Name,
-		Description:  sourceSkill.Description,
-		Tooltip:      setTooltip(values, sourceSkill.Tooltip),
-		Cooldown:     sourceSkill.Cooldown,
-		Cost:         sourceSkill.Cost,
-		CostType:     partype,
-		CostTemplate: sourceSkill.Resource,
-		Range:        sourceSkill.Range,
-		Image:        setImageRoute(sourceSkill.Image),
+		Name:        sourceSkill.Name,
+		Description: sourceSkill.Description,
+		Tooltip:     setTooltip(values, sourceSkill.Tooltip),
+		Cooldown:    setCoolDown(sourceSkill.Cooldown),
+		Cost:        setCostTemplate(sourceSkill.Resource, sourceSkill.Cost, partype, values),
+		Range:       setRange(sourceSkill.Range),
+		Image:       setImageRoute(sourceSkill.Image),
 	}
 
 	return skill
+}
+
+func setRange(rangeList []int) string {
+	skillRange := setSkillValueString(rangeList)
+	return skillRange
+}
+
+func setCoolDown(coolDownList []float64) string {
+	skillCoolDown := setSkillValueString(coolDownList)
+	return skillCoolDown
+}
+
+func setCostTemplate(template string, costList []int, costType string, values []SKillDataValues) string {
+	skillCost := setSkillValueString(costList)
+	template = strings.ReplaceAll(template, "{{ abilityresourcename }}", costType)
+	template = strings.ReplaceAll(template, "{{ cost }}", skillCost)
+	template = setTooltip(values, template)
+	return template
 }
 
 func setTooltip(values []SKillDataValues, tooltip string) string {
@@ -155,26 +171,37 @@ func setTooltip(values []SKillDataValues, tooltip string) string {
 	spellCostKeyReg, _ := regexp.Compile(`\w+`)
 	spellCostAdditionReg, _ := regexp.Compile(`\d+`)
 	damageReg, _ := regexp.Compile(`^\wdamage`)
+	damageEdgeReg, _ := regexp.Compile(`^\wedgedamage`)
 	damageRatioReg, _ := regexp.Compile(`^\wtotal\w+ratio`)
+	damageBonusReg, _ := regexp.Compile(`^\wsweetspotbonus`)
 	spellCosts := spellCostReg.FindAllString(tooltip, -1)
 	for _, spellCost := range spellCosts {
 		checkCost := spellCostKeyReg.FindString(spellCost)
 		additionString := spellCostAdditionReg.FindString(spellCost)
-		if damageReg.MatchString(checkCost) {
+		if damageReg.MatchString(checkCost) || damageEdgeReg.MatchString(checkCost) {
 			valueString := ""
+			bouns := []float64{}
 			valueIndex := slices.IndexFunc(values, func(value SKillDataValues) bool {
 				return strings.Contains(strings.ToLower(value.MName), "basedamage")
 			})
 			ratioIndex := slices.IndexFunc(values, func(value SKillDataValues) bool {
 				return damageRatioReg.MatchString(strings.ToLower(value.MName))
 			})
+			if damageEdgeReg.MatchString(checkCost) {
+				bounsIndex := slices.IndexFunc(values, func(value SKillDataValues) bool {
+					return damageBonusReg.MatchString(strings.ToLower(value.MName))
+				})
+				if bounsIndex > -1 {
+					bouns = values[bounsIndex].MValues
+				}
+			}
 			if valueIndex > -1 {
 				value := values[valueIndex]
-				valueString = fmt.Sprintf("%v%v", valueString, reduceSkill(value, additionString))
+				valueString = fmt.Sprintf("%v%v", valueString, reduceSkill(value, additionString, bouns))
 			}
 			if ratioIndex > -1 {
 				value := values[ratioIndex]
-				valueString = fmt.Sprintf("%v + %v", valueString, reduceSkillRatio(value))
+				valueString = fmt.Sprintf("%v + %v", valueString, reduceSkillRatio(value, bouns))
 			}
 			tooltip = strings.ReplaceAll(tooltip, spellCost, valueString)
 		} else {
@@ -183,39 +210,56 @@ func setTooltip(values []SKillDataValues, tooltip string) string {
 			})
 			if valueIndex > -1 {
 				value := values[valueIndex]
-				valueString := reduceSkill(value, additionString)
+				valueString := reduceSkill(value, additionString, []float64{})
 				tooltip = strings.ReplaceAll(tooltip, spellCost, valueString)
 			}
 		}
 	}
-	return tooltip
+	tooltip = strings.Replace(tooltip, "{{ spellmodifierdescriptionappend }}", "", 1)
+	return spellCostReg.ReplaceAllString(tooltip, "'?'")
 }
 
-func reduceSkill(value SKillDataValues, additionString string) string {
+func reduceSkill(value SKillDataValues, additionString string, bouns []float64) string {
 	valueString := ""
 	for i, skillValue := range value.MValues {
 		if i != 0 && i != (len(value.MValues)-1) {
 			if additionString != "" {
 				addition, err := strconv.ParseFloat(additionString, 64)
 				if err == nil {
-					skillValue = math.Round(math.Abs(skillValue*addition)*100) / 100
+					skillValue = skillValue * addition
 				}
 			}
+			if len(bouns) > 0 {
+				skillValue = skillValue + skillValue*bouns[i]
+			}
+			skillValue = math.Round(math.Abs(skillValue)*100) / 100
 			valueString = fmt.Sprintf("%v/%v", valueString, skillValue)
 		}
 	}
 	return strings.Replace(valueString, "/", "", 1)
 }
 
-func reduceSkillRatio(value SKillDataValues) string {
+func reduceSkillRatio(value SKillDataValues, bouns []float64) string {
 	valueString := "("
 	for i, skillValue := range value.MValues {
 		if i != 0 && i != (len(value.MValues)-1) {
-			valueString = fmt.Sprintf("%v/%v%v", valueString, math.Round(skillValue*10000)/100, "%")
+			skillValue = skillValue * 100
+			if len(bouns) > 0 {
+				skillValue = math.Round(math.Abs(skillValue+skillValue*bouns[i])*100) / 100
+			}
+			valueString = fmt.Sprintf("%v/%v%v", valueString, math.Round(skillValue*100)/100, "%")
 		}
 	}
 	return fmt.Sprintf("%v)", strings.Replace(valueString, "/", "", 1))
+}
 
+func setSkillValueString[T any](values []T) string {
+	skillValue := ""
+	for _, value := range values {
+		skillValue = fmt.Sprintf("%v/%v", skillValue, value)
+	}
+	skillValue = strings.Replace(skillValue, "/", "", 1)
+	return skillValue
 }
 
 func setImageRoute(sourceImage AssetsImage) string {
