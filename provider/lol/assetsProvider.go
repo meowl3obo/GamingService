@@ -20,7 +20,7 @@ func GetVersions() []string {
 }
 
 func GetLangs() []string {
-	route := "/api/languages.json"
+	route := "/cdn/languages.json"
 	response := []string{}
 	response, statusCode, err := riot.LolRequest[[]string]("GET", route)
 	if statusCode != 200 {
