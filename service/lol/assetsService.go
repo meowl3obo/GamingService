@@ -27,13 +27,12 @@ func init() {
 	cacheRoleDetails = make(map[string]map[string]map[string]RoleDetailsResponse)
 }
 
-// @Summary Get Roles
-// @Tags Assets
+// @Summary 取得全英雄
+// @Tags LoL Assets
 // @version 1.0
 // @param version query string false "版本號"
 // @param lang query string false "語系"
 // @produce application/json
-// @Success 200 string string 成功後返回的值
 // @Router /api/lol/assets/roles [get]
 func GetRoles(c *gin.Context) {
 	version := handlerVersion(c.Query("version"))
@@ -55,6 +54,14 @@ func GetRoles(c *gin.Context) {
 	}
 }
 
+// @Summary 取得單英雄詳細資料
+// @Tags LoL Assets
+// @version 1.0
+// @param name path string true "英雄名稱"
+// @param version query string false "版本號"
+// @param lang query string false "語系"
+// @produce application/json
+// @Router /api/lol/assets/role/{name} [get]
 func GetRole(c *gin.Context) {
 	name := c.Param("name")
 	version := handlerVersion(c.Query("version"))
@@ -75,12 +82,18 @@ func GetRole(c *gin.Context) {
 		skillDetails, statusCode, _ := provider.GetRoleSkillDetails(mainVersion, strings.ToLower(name))
 
 		roleDetails := transfer.ToRoleDetails(roleDetails, name, skillDetails)
-		// cacheRoleDetails[version][lang][name] = roleDetails
-		// c.JSON(statusCode, skillDetails)
+		cacheRoleDetails[version][lang][name] = roleDetails
 		c.JSON(statusCode, roleDetails)
 	}
 }
 
+// @Summary 取得全部道具
+// @Tags LoL Assets
+// @version 1.0
+// @param version query string false "版本號"
+// @param lang query string false "語系"
+// @produce application/json
+// @Router /api/lol/assets/items [get]
 func GetItems(c *gin.Context) {
 	version := handlerVersion(c.Query("version"))
 	lang := handlerLang(c.Query("lang"))
@@ -101,6 +114,13 @@ func GetItems(c *gin.Context) {
 	}
 }
 
+// @Summary 取得全部召喚師技能
+// @Tags LoL Assets
+// @version 1.0
+// @param version query string false "版本號"
+// @param lang query string false "語系"
+// @produce application/json
+// @Router /api/lol/assets/summoners [get]
 func GetSummoners(c *gin.Context) {
 	version := handlerVersion(c.Query("version"))
 	lang := handlerLang(c.Query("lang"))

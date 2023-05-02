@@ -16,15 +16,15 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/api/lol/assets/roles": {
+        "/api/lol/assets/items": {
             "get": {
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
-                    "Assers"
+                    "LoL Assets"
                 ],
-                "summary": "Get Roles",
+                "summary": "取得全部道具",
                 "parameters": [
                     {
                         "type": "string",
@@ -39,14 +39,210 @@ const docTemplate = `{
                         "in": "query"
                     }
                 ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "string"
-                        }
+                "responses": {}
+            }
+        },
+        "/api/lol/assets/role/{name}": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "LoL Assets"
+                ],
+                "summary": "取得單英雄詳細資料",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "英雄名稱",
+                        "name": "name",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "版本號",
+                        "name": "version",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "語系",
+                        "name": "lang",
+                        "in": "query"
                     }
-                }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/lol/assets/roles": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "LoL Assets"
+                ],
+                "summary": "取得全英雄",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "版本號",
+                        "name": "version",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "語系",
+                        "name": "lang",
+                        "in": "query"
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/lol/assets/summoners": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "LoL Assets"
+                ],
+                "summary": "取得全部召喚師技能",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "版本號",
+                        "name": "version",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "語系",
+                        "name": "lang",
+                        "in": "query"
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/lol/{country}/match/{matchID}": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "LoL Match"
+                ],
+                "summary": "取得單賽事詳細資料",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "國家",
+                        "name": "country",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "比賽ID",
+                        "name": "matchID",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/lol/{country}/match/{matchID}/timeline": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "LoL Match"
+                ],
+                "summary": "取得單賽事時間線",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "國家",
+                        "name": "country",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "比賽ID",
+                        "name": "matchID",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/lol/{country}/user/byname/{name}/base": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "LoL User"
+                ],
+                "summary": "取得玩家資訊，透過遊戲名稱",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "國家",
+                        "name": "country",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "遊戲名稱",
+                        "name": "name",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/api/lol/{country}/user/bypuuid/{puuid}/matchs": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "LoL User"
+                ],
+                "summary": "取得玩家賽事列表，透過 puuid",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "國家",
+                        "name": "country",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "puuid",
+                        "name": "puuid",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "筆數",
+                        "name": "count",
+                        "in": "query"
+                    }
+                ],
+                "responses": {}
             }
         },
         "/api/version": {

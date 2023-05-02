@@ -2,9 +2,6 @@ package lolService
 
 import (
 	"fmt"
-	"net/http"
-	"sort"
-	"time"
 
 	. "gaming-service/config"
 	. "gaming-service/model/lol"
@@ -22,43 +19,13 @@ func init() {
 	matchDetails = make(chan MatchInfo)
 }
 
-func GetMatchsByPuuid(c *gin.Context) {
-	local := c.GetString("country")
-	puuid := c.Param("puuid")
-	count := c.Query("count")
-	region := RegionMap[local]
-	forLoopCount := 0
-
-	if count == "" {
-		count = "10"
-	}
-
-	response := []MatchOverviewResponse{}
-
-	matchIDs, statusCode, errObj := provider.GetMatchsID(region, puuid, count)
-
-	if statusCode != 200 {
-		c.JSON(statusCode, errObj)
-		return
-	}
-
-	for _, matchID := range matchIDs {
-		go getMatchInfo(region, matchID)
-		time.Sleep(10 * time.Millisecond)
-	}
-	for forLoopCount < len(matchIDs) {
-		forLoopCount++
-		data := transfer.ToMatchOverview(<-matchDetails)
-		if data.MatchID != "" {
-			response = append(response, data)
-		}
-	}
-	sort.Slice(response, func(curIndex int, nextIndex int) bool {
-		return response[curIndex].StartTime > response[nextIndex].StartTime
-	})
-	c.JSON(http.StatusOK, response)
-}
-
+// @Summary 取得單賽事詳細資料
+// @Tags LoL Match
+// @version 1.0
+// @param country path string true "國家"
+// @param matchID path string true "比賽ID"
+// @produce application/json
+// @Router /api/lol/{country}/match/{matchID} [get]
 func GetMatchInfo(c *gin.Context) {
 	local := c.GetString("country")
 	matchID := c.Param("matchID")
@@ -73,6 +40,13 @@ func GetMatchInfo(c *gin.Context) {
 	}
 }
 
+// @Summary 取得單賽事時間線
+// @Tags LoL Match
+// @version 1.0
+// @param country path string true "國家"
+// @param matchID path string true "比賽ID"
+// @produce application/json
+// @Router /api/lol/{country}/match/{matchID}/timeline [get]
 func GetMatchTimeLine(c *gin.Context) {
 	local := c.GetString("country")
 	matchID := c.Param("matchID")

@@ -45,7 +45,7 @@ func isCorrectCountry(local string) bool {
 
 func RegionHandler() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		local := c.Param("local")
+		local := c.GetString("country")
 		region := RegionMap[local]
 		if region == "" {
 			errObj := ErrorResponse{
