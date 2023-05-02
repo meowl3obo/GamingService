@@ -1,6 +1,7 @@
 package controller
 
 import (
+	. "gaming-service/config"
 	"gaming-service/middleware"
 	"gaming-service/service"
 	lolService "gaming-service/service/lol"
@@ -13,11 +14,16 @@ type Controller struct {
 	*gin.Engine
 }
 
+type Group struct {
+	*gin.RouterGroup
+}
+
 func NewController(e *gin.Engine) *Controller {
 	return &Controller{e}
 }
 
 func (r *Controller) Router() {
+	r.NoRoute(service.NotFound)
 	r.Use(
 		middleware.CorsMiddleware(),
 		cors.Default(),
@@ -28,17 +34,11 @@ func (r *Controller) Router() {
 
 		lol := api.Group("/lol")
 		{
-			localLol := lol.Group("/:local", middleware.CountryHandler())
-			{
-				localLol.GET("/:puuid/matchs", middleware.RegionHandler(), middleware.CountHandler(), lolService.GetMatchsByPuuid)
-				userLol := localLol.Group("/user")
+			for key, country := range CountryMap {
+				group := lol.Group(key, middleware.CountryHandler(country))
 				{
-					userLol.GET("/base/:name", lolService.GetUserByName)
-				}
-				matchLol := localLol.Group("/match")
-				{
-					matchLol.GET("/:matchID", middleware.RegionHandler(), lolService.GetMatchInfo)
-					matchLol.GET("/:matchID/timeline", middleware.RegionHandler(), lolService.GetMatchTimeLine)
+					countryGroup := &Group{group}
+					countryGroup.countryRoute()
 				}
 			}
 			assetsLol := lol.Group("/assets", middleware.LangHandler(), middleware.VersionHandler())
@@ -49,5 +49,24 @@ func (r *Controller) Router() {
 				assetsLol.GET("/summoners", lolService.GetSummoners)
 			}
 		}
+	}
+}
+
+func (group *Group) countryRoute() {
+	userGroup := group.Group("/user")
+	{
+		puuidGroup := userGroup.Group("/bypuuid")
+		{
+			puuidGroup.GET("/:puuid/matchs", middleware.RegionHandler(), middleware.CountHandler(), lolService.GetMatchsByPuuid)
+		}
+		nameGroup := userGroup.Group("/byname")
+		{
+			nameGroup.GET("/:name/base", lolService.GetUserByName)
+		}
+	}
+	matchGroup := group.Group("/match")
+	{
+		matchGroup.GET("/:matchID", middleware.RegionHandler(), lolService.GetMatchInfo)
+		matchGroup.GET("/:matchID/timeline", middleware.RegionHandler(), lolService.GetMatchTimeLine)
 	}
 }

@@ -7,7 +7,7 @@ import (
 )
 
 func GetUserByName(c *gin.Context) {
-	local := c.Param("local")
+	local := c.GetString("country")
 	name := c.Param("name")
 
 	userData, statusCode, errObj := provider.GetUserByName(local, name)

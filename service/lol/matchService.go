@@ -23,10 +23,10 @@ func init() {
 }
 
 func GetMatchsByPuuid(c *gin.Context) {
-	local := c.Param("local")
+	local := c.GetString("country")
 	puuid := c.Param("puuid")
 	count := c.Query("count")
-	region := CountryMap[local]
+	region := RegionMap[local]
 	forLoopCount := 0
 
 	if count == "" {
@@ -60,9 +60,9 @@ func GetMatchsByPuuid(c *gin.Context) {
 }
 
 func GetMatchInfo(c *gin.Context) {
-	local := c.Param("local")
+	local := c.GetString("country")
 	matchID := c.Param("matchID")
-	region := CountryMap[local]
+	region := RegionMap[local]
 
 	matchInfo, statusCode, errObj := provider.GetMatchInfo(region, matchID)
 
@@ -74,9 +74,9 @@ func GetMatchInfo(c *gin.Context) {
 }
 
 func GetMatchTimeLine(c *gin.Context) {
-	local := c.Param("local")
+	local := c.GetString("country")
 	matchID := c.Param("matchID")
-	region := CountryMap[local]
+	region := RegionMap[local]
 
 	matchTimeLine, statusCode, errObj := provider.GetMatchTimeLine(region, matchID)
 
@@ -93,8 +93,9 @@ func getMatchInfo(region string, matchID string) {
 	if statusCode == 200 {
 		response = matchInfo
 	} else {
-		fmt.Println(region, matchID)
-		fmt.Println(statusCode, err)
+		fmt.Println(fmt.Sprintf(
+			"get match info failed\n region: %v\n matchID: %v\n statusCode: %v\n err: %v",
+			region, matchID, statusCode, err))
 	}
 	matchDetails <- response
 }

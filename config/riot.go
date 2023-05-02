@@ -3,6 +3,24 @@ package config
 var (
 	CountryList = []string{"BR1", "EUN1", "EUW1", "JP1", "KR", "LA1", "LA2", "NA1", "OC1", "PH2", "RU", "SG2", "TH2", "TR1", "TW2", "VN2"}
 	CountryMap  = map[string]string{
+		"br":  "BR1",
+		"eun": "EUN1",
+		"euw": "EUW1",
+		"jp":  "JP1",
+		"kr":  "KR",
+		"la1": "LA1",
+		"la2": "LA2",
+		"na":  "NA1",
+		"oc":  "OC1",
+		"ph":  "PH2",
+		"ru":  "RU",
+		"sh":  "SG2",
+		"th":  "TH2",
+		"tr":  "TR1",
+		"tw":  "TW2",
+		"vn":  "VN2",
+	}
+	RegionMap = map[string]string{
 		"TW2":  "SEA",
 		"OC1":  "SEA",
 		"PH2":  "SEA",
