@@ -32,7 +32,7 @@ func (r *Controller) Router() {
 		cors.Default(),
 	)
 
-	url := ginSwagger.URL("http://localhost:8080/swagger/doc.json")
+	url := ginSwagger.URL("/swagger/doc.json")
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, url))
 	api := r.Group("/api")
 	{
