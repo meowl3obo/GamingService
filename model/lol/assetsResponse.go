@@ -13,14 +13,14 @@ type RoleResponse struct {
 }
 
 type RoleStatus struct {
-	Hp                   int     //血量
-	Hpperlevel           int     //成長血量
-	Mp                   int     //MP
+	Hp                   float64 //血量
+	Hpperlevel           float64 //成長血量
+	Mp                   float64 //MP
 	Mpperlevel           float64 //成長MP
 	Movespeed            int     //移速
 	Armor                int     //物防
 	Armorperlevel        float64 //成長物防
-	Spellblock           int     //魔防
+	Spellblock           float64 //魔防
 	Spellblockperlevel   float64 //成長魔防
 	Attackrange          int     //攻擊距離
 	Hpregen              float64 //生命回復

@@ -2,12 +2,15 @@ package controller
 
 import (
 	. "gaming-service/config"
+	_ "gaming-service/docs"
 	"gaming-service/middleware"
 	"gaming-service/service"
 	lolService "gaming-service/service/lol"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 type Controller struct {
@@ -28,6 +31,9 @@ func (r *Controller) Router() {
 		middleware.CorsMiddleware(),
 		cors.Default(),
 	)
+
+	url := ginSwagger.URL("http://localhost:8080/swagger/doc.json")
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, url))
 	api := r.Group("/api")
 	{
 		api.GET("/version", service.Version)

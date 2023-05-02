@@ -107,14 +107,14 @@ type RoleDetails struct {
 }
 
 type RoleState struct {
-	Hp                   int     `json:"hp"`
-	Hpperlevel           int     `json:"hpperlevel"`
-	Mp                   int     `json:"mp"`
+	Hp                   float64 `json:"hp"`
+	Hpperlevel           float64 `json:"hpperlevel"`
+	Mp                   float64 `json:"mp"`
 	Mpperlevel           float64 `json:"mpperlevel"`
 	Movespeed            int     `json:"movespeed"`
 	Armor                int     `json:"armor"`
 	Armorperlevel        float64 `json:"armorperlevel"`
-	Spellblock           int     `json:"spellblock"`
+	Spellblock           float64 `json:"spellblock"`
 	Spellblockperlevel   float64 `json:"spellblockperlevel"`
 	Attackrange          int     `json:"attackrange"`
 	Hpregen              float64 `json:"hpregen"`

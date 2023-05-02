@@ -10,6 +10,12 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// @Summary Get Version
+// @Tags Version
+// @version 1.0
+// @produce text/plain
+// @Success 200 string string 成功後返回的值
+// @Router /api/version [get]
 func Version(c *gin.Context) {
 	version := os.Getenv("VERSION")
 	env := os.Getenv("ENV")

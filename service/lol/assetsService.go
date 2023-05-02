@@ -27,6 +27,14 @@ func init() {
 	cacheRoleDetails = make(map[string]map[string]map[string]RoleDetailsResponse)
 }
 
+// @Summary Get Roles
+// @Tags Assets
+// @version 1.0
+// @param version query string false "版本號"
+// @param lang query string false "語系"
+// @produce application/json
+// @Success 200 string string 成功後返回的值
+// @Router /api/lol/assets/roles [get]
 func GetRoles(c *gin.Context) {
 	version := handlerVersion(c.Query("version"))
 	lang := handlerLang(c.Query("lang"))

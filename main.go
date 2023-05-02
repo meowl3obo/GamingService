@@ -7,6 +7,7 @@ import (
 
 	config "gaming-service/config"
 	"gaming-service/controller"
+	_ "gaming-service/docs"
 	lolProvider "gaming-service/provider/lol"
 
 	"github.com/gin-gonic/gin"
@@ -24,6 +25,12 @@ func init() {
 	config.SetVersionList(lolVersions)
 }
 
+// @title Gaming Service Gin swagger
+// @version 1.0
+// @description Gin swagger
+
+// @host localhost:8080
+// schemes http
 func main() {
 	r := gin.Default()                   //1. 註冊一個路由器
 	r.RedirectFixedPath = true           //   自動修正url 允許大小寫
