@@ -11,3 +11,8 @@ type ErrorResponse struct {
 	Code    int
 	Message string
 }
+
+type VersionResponse[T any] struct {
+	Version string
+	Data    T
+}

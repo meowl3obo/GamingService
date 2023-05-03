@@ -6,6 +6,7 @@ import (
 	"regexp"
 	"strings"
 
+	. "gaming-service/model"
 	. "gaming-service/model/lol"
 	provider "gaming-service/provider/lol"
 	transfer "gaming-service/transfer/lol"
@@ -39,7 +40,7 @@ func GetRoles(c *gin.Context) {
 	lang := handlerLang(c.Query("lang"))
 
 	if checkRolesMapCache(version, lang) {
-		c.JSON(http.StatusOK, cacheRolesMap[version][lang])
+		c.JSON(http.StatusOK, setVersionResponse(version, cacheRolesMap[version][lang]))
 		return
 	}
 
@@ -50,7 +51,7 @@ func GetRoles(c *gin.Context) {
 	} else {
 		rolesMap := transfer.ToRoleMap(rolesDetails)
 		cacheRolesMap[version][lang] = rolesMap
-		c.JSON(statusCode, rolesMap)
+		c.JSON(statusCode, setVersionResponse(version, rolesMap))
 	}
 }
 
@@ -68,7 +69,7 @@ func GetRole(c *gin.Context) {
 	lang := handlerLang(c.Query("lang"))
 
 	if checkRoleDetailsCache(version, lang, name) {
-		c.JSON(http.StatusOK, cacheRoleDetails[version][lang][name])
+		c.JSON(http.StatusOK, setVersionResponse(version, cacheRoleDetails[version][lang][name]))
 		return
 	}
 
@@ -79,11 +80,11 @@ func GetRole(c *gin.Context) {
 	} else {
 		versionReg, _ := regexp.Compile(`\.\d$`)
 		mainVersion := versionReg.ReplaceAllString(version, "")
-		skillDetails, statusCode, _ := provider.GetRoleSkillDetails(mainVersion, strings.ToLower(name))
+		skillDetails, _, _ := provider.GetRoleSkillDetails(mainVersion, strings.ToLower(name))
 
 		roleDetails := transfer.ToRoleDetails(roleDetails, name, skillDetails)
 		cacheRoleDetails[version][lang][name] = roleDetails
-		c.JSON(statusCode, roleDetails)
+		c.JSON(statusCode, setVersionResponse(version, roleDetails))
 	}
 }
 
@@ -99,7 +100,7 @@ func GetItems(c *gin.Context) {
 	lang := handlerLang(c.Query("lang"))
 
 	if checkItemsMapCache(version, lang) {
-		c.JSON(http.StatusOK, cacheItemsMap[version][lang])
+		c.JSON(http.StatusOK, setVersionResponse(version, cacheItemsMap[version][lang]))
 		return
 	}
 
@@ -110,7 +111,7 @@ func GetItems(c *gin.Context) {
 	} else {
 		itemsMap := transfer.ToItemMap(items)
 		cacheItemsMap[version][lang] = itemsMap
-		c.JSON(statusCode, itemsMap)
+		c.JSON(statusCode, setVersionResponse(version, itemsMap))
 	}
 }
 
@@ -126,7 +127,7 @@ func GetSummoners(c *gin.Context) {
 	lang := handlerLang(c.Query("lang"))
 
 	if checkSummonersMapCache(version, lang) {
-		c.JSON(http.StatusOK, cacheSummonersMap[version][lang])
+		c.JSON(http.StatusOK, setVersionResponse(version, cacheSummonersMap[version][lang]))
 		return
 	}
 
@@ -137,8 +138,16 @@ func GetSummoners(c *gin.Context) {
 	} else {
 		summonersMap := transfer.ToSummonerMap(summonersDetails)
 		cacheSummonersMap[version][lang] = summonersMap
-		c.JSON(statusCode, summonersMap)
+		c.JSON(statusCode, setVersionResponse(version, summonersMap))
 	}
+}
+
+func setVersionResponse[T any](version string, data T) VersionResponse[T] {
+	response := VersionResponse[T]{
+		Version: version,
+		Data:    data,
+	}
+	return response
 }
 
 func handlerVersion(version string) string {
