@@ -77,10 +77,10 @@ func ToSummonerMap(source AssetsData[SummonerData]) map[string]SummonerResponse 
 
 func ToRoleDetails(source AssetsData[RoleDetails], name string, skillDetails map[string]SkillDetail) RoleDetailsResponse {
 	data := source.Data[name]
-	skillQKeys := fmt.Sprintf("Characters/%v/Spells/%vQAbility/%vQ", name, name, name)
-	skillWKeys := fmt.Sprintf("Characters/%v/Spells/%vWAbility/%vW", name, name, name)
-	skillEKeys := fmt.Sprintf("Characters/%v/Spells/%vEAbility/%vE", name, name, name)
-	skillRKeys := fmt.Sprintf("Characters/%v/Spells/%vRAbility/%vR", name, name, name)
+	skillQKeys := fmt.Sprintf("Characters/%v/Spells/%vAbility/%v", name, data.Spells[0].ID, data.Spells[0].ID)
+	skillWKeys := fmt.Sprintf("Characters/%v/Spells/%vAbility/%v", name, data.Spells[1].ID, data.Spells[1].ID)
+	skillEKeys := fmt.Sprintf("Characters/%v/Spells/%vAbility/%v", name, data.Spells[2].ID, data.Spells[2].ID)
+	skillRKeys := fmt.Sprintf("Characters/%v/Spells/%vAbility/%v", name, data.Spells[3].ID, data.Spells[3].ID)
 	response := RoleDetailsResponse{
 		Id:      data.ID,
 		Key:     data.Key,
@@ -170,7 +170,7 @@ func setTooltip(values []SKillDataValues, tooltip string) string {
 	spellCostReg, _ := regexp.Compile(`{{ \S+ }}`)
 	spellCostKeyReg, _ := regexp.Compile(`\w+`)
 	spellCostAdditionReg, _ := regexp.Compile(`\d+`)
-	damageReg, _ := regexp.Compile(`^\wdamage`)
+	damageReg, _ := regexp.Compile(`^\wdamage|^damage$|^totaldamage$`)
 	damageEdgeReg, _ := regexp.Compile(`^\wedgedamage`)
 	damageRatioReg, _ := regexp.Compile(`^\wtotal\w+ratio`)
 	damageBonusReg, _ := regexp.Compile(`^\wsweetspotbonus`)
